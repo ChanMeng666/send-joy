@@ -140,6 +140,12 @@ const styles = {
     textAlign: 'center' as const,
     borderBottom: `4px solid ${colors.black}`,
   },
+  headerTextBox: {
+    backgroundColor: colors.christmasRed,
+    display: 'inline-block',
+    padding: '15px 30px',
+    borderRadius: '4px',
+  },
   headerSubtitle: {
     color: colors.goldLight,
     fontSize: '14px',
@@ -158,6 +164,13 @@ const styles = {
     textShadow: `4px 4px 0px ${colors.black}`,
     lineHeight: 1.1,
   },
+  headerYearBox: {
+    backgroundColor: colors.christmasRedDark,
+    display: 'inline-block',
+    padding: '8px 20px',
+    borderRadius: '4px',
+    marginTop: '10px',
+  },
   headerYear: {
     color: colors.gold,
     fontSize: '24px',
@@ -167,7 +180,6 @@ const styles = {
   },
   iconBar: {
     backgroundColor: colors.cream,
-    backgroundImage: polkaDotPatterns.greenOnCream,
     padding: '20px',
     textAlign: 'center' as const,
     borderBottom: `4px solid ${colors.black}`,
@@ -176,7 +188,6 @@ const styles = {
     padding: '30px',
     textAlign: 'center' as const,
     backgroundColor: colors.cream,
-    backgroundImage: polkaDotPatterns.redOnCream,
     borderBottom: `4px solid ${colors.black}`,
   },
   imageContainer: {
@@ -315,14 +326,27 @@ const styles = {
     padding: '25px',
     textAlign: 'center' as const,
   },
+  footerTextBox: {
+    backgroundColor: colors.christmasGreenDark,
+    display: 'inline-block',
+    padding: '12px 25px',
+    borderRadius: '4px',
+    marginBottom: '10px',
+  },
   footerText: {
     color: colors.white,
     fontSize: '14px',
     fontWeight: 600,
-    margin: '0 0 10px 0',
+    margin: 0,
+  },
+  footerSubtextBox: {
+    backgroundColor: colors.christmasGreen,
+    display: 'inline-block',
+    padding: '8px 20px',
+    borderRadius: '4px',
   },
   footerSubtext: {
-    color: colors.christmasGreenLight,
+    color: colors.white,
     fontSize: '12px',
     margin: 0,
   },
@@ -382,17 +406,21 @@ export const ChristmasEmail: React.FC<ChristmasEmailProps> = ({
 
           {/* Main Header */}
           <Section style={styles.header}>
-            <Text style={styles.headerSubtitle}>Season's Greetings</Text>
-            <Text style={styles.headerTitle}>Merry Christmas</Text>
-            <table cellPadding="0" cellSpacing="0" style={{ margin: '15px auto 0' }}>
-              <tbody>
-                <tr>
-                  <td style={{ padding: '0 10px' }}><Icon type="star" size={20} color={colors.gold} /></td>
-                  <td><Text style={styles.headerYear}>{nextYear}</Text></td>
-                  <td style={{ padding: '0 10px' }}><Icon type="star" size={20} color={colors.gold} /></td>
-                </tr>
-              </tbody>
-            </table>
+            <div style={styles.headerTextBox}>
+              <Text style={styles.headerSubtitle}>Season's Greetings</Text>
+              <Text style={styles.headerTitle}>Merry Christmas</Text>
+            </div>
+            <div style={styles.headerYearBox}>
+              <table cellPadding="0" cellSpacing="0" style={{ margin: '0 auto' }}>
+                <tbody>
+                  <tr>
+                    <td style={{ padding: '0 10px' }}><Icon type="star" size={20} color={colors.gold} /></td>
+                    <td><Text style={styles.headerYear}>{nextYear}</Text></td>
+                    <td style={{ padding: '0 10px' }}><Icon type="star" size={20} color={colors.gold} /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </Section>
 
           {/* Icon Decoration Bar */}
@@ -517,12 +545,17 @@ export const ChristmasEmail: React.FC<ChristmasEmailProps> = ({
                 </tr>
               </tbody>
             </table>
-            <Text style={styles.footerText}>
-              Merry Christmas & Happy New Year {nextYear}!
-            </Text>
-            <Text style={styles.footerSubtext}>
-              Sent with warmth and appreciation
-            </Text>
+            <div style={styles.footerTextBox}>
+              <Text style={styles.footerText}>
+                Merry Christmas & Happy New Year {nextYear}!
+              </Text>
+            </div>
+            <br />
+            <div style={styles.footerSubtextBox}>
+              <Text style={styles.footerSubtext}>
+                Sent with warmth and appreciation
+              </Text>
+            </div>
           </Section>
 
           {/* Bottom Decorative Banner */}
