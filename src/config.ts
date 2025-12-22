@@ -26,6 +26,6 @@ export const config = {
   // Email subject line
   emailSubject: '🎄 Season\'s Greetings from Chan Meng!',
 
-  // Placeholder for user's personal image
-  personalImageUrl: 'YOUR_IMAGE_URL_HERE',
+  // Personal image URL
+  personalImageUrl: 'https://lxd4dc8r8oetlgua.public.blob.vercel-storage.com/public/img/christmas-greeting-email/christmas-greeting.png',
 };

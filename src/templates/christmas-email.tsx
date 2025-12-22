@@ -93,6 +93,23 @@ const colors = {
 };
 
 // ============================================
+// Polka Dot Background Patterns
+// ============================================
+
+const createPolkaDotPattern = (dotColor: string, bgColor: string, dotSize: number = 4, spacing: number = 20): string => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${spacing}" height="${spacing}" viewBox="0 0 ${spacing} ${spacing}"><rect fill="${bgColor}" width="${spacing}" height="${spacing}"/><circle fill="${dotColor}" cx="${spacing/2}" cy="${spacing/2}" r="${dotSize}"/></svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+};
+
+const polkaDotPatterns = {
+  greenOnCream: createPolkaDotPattern('#16A34A', '#FEF3C7', 3, 16),
+  redOnCream: createPolkaDotPattern('#DC2626', '#FEF3C7', 3, 16),
+  goldOnRed: createPolkaDotPattern('#F59E0B', '#DC2626', 4, 20),
+  whiteOnGreen: createPolkaDotPattern('#FFFFFF', '#16A34A', 3, 18),
+  creamOnGreen: createPolkaDotPattern('#FEF3C7', '#DCFCE7', 4, 18),
+};
+
+// ============================================
 // Styles - Neobrutalism + Christmas Theme
 // ============================================
 
@@ -118,6 +135,7 @@ const styles = {
   },
   header: {
     backgroundColor: colors.christmasRed,
+    backgroundImage: polkaDotPatterns.goldOnRed,
     padding: '40px 30px',
     textAlign: 'center' as const,
     borderBottom: `4px solid ${colors.black}`,
@@ -148,7 +166,8 @@ const styles = {
     letterSpacing: '8px',
   },
   iconBar: {
-    backgroundColor: colors.warmWhite,
+    backgroundColor: colors.cream,
+    backgroundImage: polkaDotPatterns.greenOnCream,
     padding: '20px',
     textAlign: 'center' as const,
     borderBottom: `4px solid ${colors.black}`,
@@ -157,6 +176,7 @@ const styles = {
     padding: '30px',
     textAlign: 'center' as const,
     backgroundColor: colors.cream,
+    backgroundImage: polkaDotPatterns.redOnCream,
     borderBottom: `4px solid ${colors.black}`,
   },
   imageContainer: {
@@ -174,6 +194,7 @@ const styles = {
   },
   greetingSection: {
     backgroundColor: colors.christmasGreenLight,
+    backgroundImage: polkaDotPatterns.creamOnGreen,
     padding: '30px',
     borderBottom: `4px solid ${colors.black}`,
   },
@@ -289,6 +310,7 @@ const styles = {
   },
   footer: {
     backgroundColor: colors.christmasGreen,
+    backgroundImage: polkaDotPatterns.whiteOnGreen,
     borderTop: `4px solid ${colors.black}`,
     padding: '25px',
     textAlign: 'center' as const,
