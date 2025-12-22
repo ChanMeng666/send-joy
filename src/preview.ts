@@ -4,7 +4,7 @@ import { render } from '@react-email/render';
 import { ChristmasEmail } from './templates/christmas-email.js';
 import { config } from './config.js';
 
-const PORT = 3001;
+const PORT = 3002;
 
 async function startPreviewServer() {
   const server = http.createServer(async (req, res) => {
