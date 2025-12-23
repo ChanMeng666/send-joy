@@ -15,6 +15,7 @@ import { config } from '../config.js';
 interface ChristmasEmailProps {
   recipientName?: string;
   personalImageUrl?: string;
+  festiveImageUrl?: string;
 }
 
 // ============================================
@@ -185,23 +186,82 @@ const styles = {
     borderBottom: `4px solid ${colors.black}`,
   },
   imageSection: {
-    padding: '30px',
+    padding: '35px 30px',
     textAlign: 'center' as const,
-    backgroundColor: colors.cream,
+    backgroundColor: colors.christmasRedLight,
+    backgroundImage: polkaDotPatterns.redOnCream,
     borderBottom: `4px solid ${colors.black}`,
   },
   imageContainer: {
-    border: `5px solid ${colors.black}`,
-    boxShadow: `8px 8px 0px ${colors.christmasGreen}`,
+    border: `6px solid ${colors.black}`,
+    boxShadow: `10px 10px 0px ${colors.christmasRed}`,
     display: 'inline-block',
     backgroundColor: colors.white,
-    padding: '8px',
+    padding: '10px',
+    borderRadius: '4px',
   },
   mainImage: {
     maxWidth: '100%',
-    width: '400px',
+    width: '480px',
     height: 'auto',
     display: 'block',
+    borderRadius: '2px',
+  },
+  imageCaption: {
+    backgroundColor: colors.christmasRed,
+    color: colors.white,
+    fontSize: '14px',
+    fontWeight: 700,
+    padding: '12px 20px',
+    margin: '15px auto 0',
+    display: 'inline-block',
+    border: `3px solid ${colors.black}`,
+    boxShadow: `4px 4px 0px ${colors.black}`,
+    letterSpacing: '1px',
+  },
+  // Second image section (green theme)
+  festiveImageSection: {
+    padding: '35px 30px',
+    textAlign: 'center' as const,
+    backgroundColor: colors.christmasGreenLight,
+    backgroundImage: polkaDotPatterns.creamOnGreen,
+    borderBottom: `4px solid ${colors.black}`,
+  },
+  festiveImageContainer: {
+    border: `6px solid ${colors.black}`,
+    boxShadow: `10px 10px 0px ${colors.christmasGreen}`,
+    display: 'inline-block',
+    backgroundColor: colors.white,
+    padding: '10px',
+    borderRadius: '4px',
+  },
+  festiveImageCaption: {
+    backgroundColor: colors.christmasGreen,
+    color: colors.white,
+    fontSize: '14px',
+    fontWeight: 700,
+    padding: '12px 20px',
+    margin: '15px auto 0',
+    display: 'inline-block',
+    border: `3px solid ${colors.black}`,
+    boxShadow: `4px 4px 0px ${colors.black}`,
+    letterSpacing: '1px',
+  },
+  // Decorative ribbon divider
+  ribbonDivider: {
+    backgroundColor: colors.christmasRed,
+    padding: '12px 20px',
+    textAlign: 'center' as const,
+    borderTop: `3px solid ${colors.black}`,
+    borderBottom: `3px solid ${colors.black}`,
+  },
+  ribbonText: {
+    color: colors.white,
+    fontSize: '13px',
+    fontWeight: 700,
+    margin: 0,
+    letterSpacing: '3px',
+    textTransform: 'uppercase' as const,
   },
   greetingSection: {
     backgroundColor: colors.christmasGreenLight,
@@ -376,6 +436,7 @@ const styles = {
 export const ChristmasEmail: React.FC<ChristmasEmailProps> = ({
   recipientName = 'Friend',
   personalImageUrl = config.personalImageUrl,
+  festiveImageUrl = config.festiveImageUrl,
 }) => {
   const currentYear = new Date().getFullYear();
   const nextYear = currentYear + 1;
@@ -383,7 +444,7 @@ export const ChristmasEmail: React.FC<ChristmasEmailProps> = ({
   return (
     <Html>
       <Head>
-        <title>Season's Greetings from {config.sender.name}</title>
+        <title>{`Season's Greetings from ${config.sender.name}`}</title>
       </Head>
       <Body style={styles.body}>
         <Container style={styles.container}>
@@ -442,12 +503,28 @@ export const ChristmasEmail: React.FC<ChristmasEmailProps> = ({
           {/* Personal Image Section */}
           {personalImageUrl && personalImageUrl !== 'YOUR_IMAGE_URL_HERE' && (
             <Section style={styles.imageSection}>
+              <table cellPadding="0" cellSpacing="0" style={{ margin: '0 auto 15px' }}>
+                <tbody>
+                  <tr>
+                    <td style={styles.iconCell}><Icon type="star" size={20} color={colors.gold} /></td>
+                    <td style={styles.iconCell}><Icon type="holly" size={22} color={colors.christmasGreen} /></td>
+                    <td style={styles.iconCell}><Icon type="star" size={20} color={colors.gold} /></td>
+                  </tr>
+                </tbody>
+              </table>
               <div style={styles.imageContainer}>
                 <Img
                   src={personalImageUrl}
                   alt="Holiday Greetings"
                   style={styles.mainImage}
                 />
+              </div>
+              <div>
+                <Text style={styles.imageCaption}>
+                  <Icon type="snowflake" size={14} color={colors.white} />
+                  <span style={{ margin: '0 10px' }}>Holiday Wishes</span>
+                  <Icon type="snowflake" size={14} color={colors.white} />
+                </Text>
               </div>
             </Section>
           )}
@@ -521,6 +598,51 @@ export const ChristmasEmail: React.FC<ChristmasEmailProps> = ({
               </Text>
             </div>
           </Section>
+
+          {/* Decorative Ribbon Divider */}
+          <Section style={styles.ribbonDivider}>
+            <table cellPadding="0" cellSpacing="0" style={{ margin: '0 auto' }}>
+              <tbody>
+                <tr>
+                  <td style={{ padding: '0 8px' }}><Icon type="gift" size={16} color={colors.gold} /></td>
+                  <td><Text style={styles.ribbonText}>Spreading Holiday Cheer</Text></td>
+                  <td style={{ padding: '0 8px' }}><Icon type="gift" size={16} color={colors.gold} /></td>
+                </tr>
+              </tbody>
+            </table>
+          </Section>
+
+          {/* Festive Image Section */}
+          {festiveImageUrl && (
+            <Section style={styles.festiveImageSection}>
+              <table cellPadding="0" cellSpacing="0" style={{ margin: '0 auto 15px' }}>
+                <tbody>
+                  <tr>
+                    <td style={styles.iconCell}><Icon type="bell" size={20} color={colors.gold} /></td>
+                    <td style={styles.iconCell}><Icon type="christmasTree" size={24} color={colors.christmasGreen} /></td>
+                    <td style={styles.iconCell}><Icon type="bell" size={20} color={colors.gold} /></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style={styles.festiveImageContainer}>
+                <Img
+                  src={festiveImageUrl}
+                  alt="Festive Celebration"
+                  style={styles.mainImage}
+                />
+              </div>
+              <div>
+                <Text style={styles.festiveImageCaption}>
+                  <Icon type="star" size={14} color={colors.gold} />
+                  <span style={{ margin: '0 10px' }}>Season's Joy</span>
+                  <Icon type="star" size={14} color={colors.gold} />
+                </Text>
+              </div>
+            </Section>
+          )}
+
+          {/* Gold Divider before Sender */}
+          <Hr style={styles.divider} />
 
           {/* Sender Card */}
           <Section style={styles.senderSection}>

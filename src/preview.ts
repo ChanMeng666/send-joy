@@ -4,7 +4,7 @@ import { render } from '@react-email/render';
 import { ChristmasEmail } from './templates/christmas-email.js';
 import { config } from './config.js';
 
-const PORT = 3005;
+const PORT = 3006;
 
 async function startPreviewServer() {
   const server = http.createServer(async (req, res) => {
@@ -15,6 +15,7 @@ async function startPreviewServer() {
           React.createElement(ChristmasEmail, {
             recipientName: 'Friend',
             personalImageUrl: config.personalImageUrl,
+            festiveImageUrl: config.festiveImageUrl,
           })
         );
 
@@ -109,6 +110,7 @@ async function startPreviewServer() {
           React.createElement(ChristmasEmail, {
             recipientName: 'Friend',
             personalImageUrl: config.personalImageUrl,
+            festiveImageUrl: config.festiveImageUrl,
           })
         );
 
