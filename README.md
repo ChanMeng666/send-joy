@@ -7,6 +7,9 @@
 
 A Node.js application for sending beautifully designed Christmas greeting emails using [Resend](https://resend.com). Features a bold **Neobrutalism** design style with festive red and green colors.
 
+<img width="2560" height="6602" alt="screencapture-mail-google-mail-u-2-2025-12-23-19_17_02" src="https://github.com/user-attachments/assets/dbab43d5-6af2-4417-a738-4983ae3e5ab8" />
+
+
 ## Features
 
 - **Neobrutalism Design** - Bold 3-5px black borders, hard offset shadows (no blur), high-contrast colors
