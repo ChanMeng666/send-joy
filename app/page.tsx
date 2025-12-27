@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   Mail,
@@ -13,11 +14,41 @@ import {
   Newspaper
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { WelcomeModal } from '@/components/onboarding/WelcomeModal'
+import { SetupProgress } from '@/components/progress/SetupProgress'
+
+const ONBOARDING_KEY = 'email-platform-onboarding'
 
 export default function HomePage() {
+  const [showWelcome, setShowWelcome] = useState(false)
+
+  useEffect(() => {
+    // Check if this is the first visit
+    const saved = localStorage.getItem(ONBOARDING_KEY)
+    if (!saved) {
+      setShowWelcome(true)
+    }
+  }, [])
+
+  const handleWelcomeComplete = () => {
+    localStorage.setItem(ONBOARDING_KEY, JSON.stringify({
+      hasCompletedWelcome: true,
+      completedAt: new Date().toISOString(),
+    }))
+    setShowWelcome(false)
+  }
+
   return (
     <div className="p-8">
-      {/* 页面标题 */}
+      {/* Welcome Modal for first-time visitors */}
+      {showWelcome && (
+        <WelcomeModal
+          onGetStarted={handleWelcomeComplete}
+          onSkip={handleWelcomeComplete}
+        />
+      )}
+
+      {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-black uppercase tracking-tight mb-2">
           Email Template Platform
@@ -27,7 +58,10 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* 快速操作卡片 */}
+      {/* Setup Progress - shows until all steps are complete */}
+      <SetupProgress />
+
+      {/* Quick Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <QuickActionCard
           icon={<Palette className="w-8 h-8" />}

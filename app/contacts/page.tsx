@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import {
   Plus,
   Search,
@@ -13,11 +14,14 @@ import {
   X,
   Check,
   AlertCircle,
-  Loader2
+  Loader2,
+  HelpCircle
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import { SmartAlert, SuccessAlert } from '@/components/shared/SmartAlert'
+import { HelpButton } from '@/components/help/HelpButton'
 
 interface Contact {
   id: string
@@ -301,28 +305,34 @@ export default function ContactsPage() {
             Manage your email recipients
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            className="neo-border"
-            onClick={handleImportCSV}
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            Import CSV
-          </Button>
-          <Button
-            variant="outline"
-            className="neo-border"
-            onClick={handleSyncResend}
-            disabled={syncStatus === 'loading'}
-          >
-            {syncStatus === 'loading' ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <RefreshCw className="w-4 h-4 mr-2" />
-            )}
-            Sync Resend
-          </Button>
+        <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              className="neo-border"
+              onClick={handleImportCSV}
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Import CSV
+            </Button>
+            <HelpButton topic="csv-import" />
+          </div>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              className="neo-border"
+              onClick={handleSyncResend}
+              disabled={syncStatus === 'loading'}
+            >
+              {syncStatus === 'loading' ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4 mr-2" />
+              )}
+              Sync Resend
+            </Button>
+            <HelpButton topic="resend-sync" />
+          </div>
           <Button
             className="neo-button bg-neo-green text-white"
             onClick={() => setShowAddForm(true)}
@@ -334,15 +344,27 @@ export default function ContactsPage() {
       </div>
 
       {/* Sync Status Message */}
-      {syncMessage && (
-        <div className={`mb-6 p-4 neo-border flex items-center gap-2 ${
-          syncStatus === 'success' ? 'bg-green-50 text-green-800' :
-          syncStatus === 'error' ? 'bg-red-50 text-red-800' :
-          'bg-blue-50 text-blue-800'
-        }`}>
-          {syncStatus === 'success' && <Check className="w-5 h-5" />}
-          {syncStatus === 'error' && <AlertCircle className="w-5 h-5" />}
-          {syncStatus === 'loading' && <Loader2 className="w-5 h-5 animate-spin" />}
+      {syncMessage && syncStatus === 'success' && (
+        <SuccessAlert
+          title="Sync Complete"
+          description={syncMessage}
+          className="mb-6"
+        />
+      )}
+      {syncMessage && syncStatus === 'error' && (
+        <SmartAlert
+          message={{
+            title: 'Sync Failed',
+            description: syncMessage,
+            severity: 'error',
+            action: syncMessage.includes('Settings') ? { text: 'Go to Settings', href: '/settings' } : undefined,
+          }}
+          className="mb-6"
+        />
+      )}
+      {syncMessage && syncStatus === 'loading' && (
+        <div className="mb-6 p-4 neo-border flex items-center gap-2 bg-blue-50 text-blue-800 border-blue-300">
+          <Loader2 className="w-5 h-5 animate-spin" />
           {syncMessage}
         </div>
       )}

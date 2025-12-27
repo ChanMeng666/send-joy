@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/components/ui/use-toast'
+import { ApiKeySetupGuide } from '@/components/settings/ApiKeySetupGuide'
+import { HelpButton } from '@/components/help/HelpButton'
 
 interface Settings {
   resendApiKey: string
@@ -100,7 +102,10 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="apiKey">Resend API Key</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="apiKey">Resend API Key</Label>
+                <HelpButton topic="resend-api-key" />
+              </div>
               <div className="relative">
                 <Input
                   id="apiKey"
@@ -122,10 +127,15 @@ export default function SettingsPage() {
                   )}
                 </button>
               </div>
+              {/* Show setup guide when API key is empty */}
+              {!settings.resendApiKey && <ApiKeySetupGuide />}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="audienceId">Audience ID (Optional)</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="audienceId">Audience ID (Optional)</Label>
+                <HelpButton topic="audience-id" />
+              </div>
               <Input
                 id="audienceId"
                 placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -155,7 +165,10 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="senderName">Sender Name</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="senderName">Sender Name</Label>
+                <HelpButton topic="sender-name" />
+              </div>
               <Input
                 id="senderName"
                 placeholder="Your Name"
@@ -166,7 +179,10 @@ export default function SettingsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="senderEmail">Sender Email</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="senderEmail">Sender Email</Label>
+                <HelpButton topic="sender-email" />
+              </div>
               <Input
                 id="senderEmail"
                 type="email"
@@ -176,7 +192,8 @@ export default function SettingsPage() {
                 className="neo-border"
               />
               <p className="text-xs text-gray-500">
-                Must be a verified domain in your Resend account
+                Must be a verified domain in your Resend account.
+                For testing, you can use <code className="bg-gray-100 px-1 rounded">delivered@resend.dev</code>
               </p>
             </div>
           </CardContent>

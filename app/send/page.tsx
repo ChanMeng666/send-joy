@@ -21,6 +21,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import { SmartAlert } from '@/components/shared/SmartAlert'
+
+const EMAILS_SENT_KEY = 'email-platform-emails-sent'
 
 const TEMPLATES_STORAGE_KEY = 'email-platform-templates'
 const CONTACTS_STORAGE_KEY = 'email-platform-contacts'
@@ -475,18 +478,7 @@ function StepRecipients({
     return (
       <div>
         <h2 className="text-xl font-bold mb-4">Select Recipients</h2>
-        <div className="flex items-center gap-2 p-4 bg-amber-50 border-2 border-amber-200 mb-4">
-          <AlertCircle className="w-5 h-5 text-amber-600" />
-          <span className="text-amber-700">
-            No contacts found. Please add contacts first.
-          </span>
-        </div>
-        <Link href="/contacts">
-          <Button className="neo-button bg-neo-green text-white">
-            Go to Contacts
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </Link>
+        <SmartAlert errorCode="NO_CONTACTS" className="mb-4" />
       </div>
     )
   }
@@ -871,26 +863,36 @@ function StepSend({
 
     setSending(false)
     setSent(true)
+
+    // Track successful sends for progress tracking
+    const successfulSends = sendResults.filter(r => r.success).length
+    if (successfulSends > 0) {
+      try {
+        const current = parseInt(localStorage.getItem(EMAILS_SENT_KEY) || '0', 10)
+        localStorage.setItem(EMAILS_SENT_KEY, String(current + successfulSends))
+      } catch (e) {
+        console.error('Failed to track emails sent:', e)
+      }
+    }
   }
 
   if (!sent) {
     return (
       <div className="text-center">
         {error && (
-          <div className="flex items-center gap-2 p-4 bg-red-50 border-2 border-red-200 mb-6 text-left">
-            <AlertCircle className="w-5 h-5 text-red-600" />
-            <span className="text-red-700">{error}</span>
-          </div>
+          <SmartAlert
+            message={{
+              title: 'Configuration Required',
+              description: error,
+              severity: 'error',
+              action: { text: 'Go to Settings', href: '/settings' },
+            }}
+            className="mb-6 text-left"
+          />
         )}
 
-        {!settings.apiKey && (
-          <div className="flex items-center gap-2 p-4 bg-amber-50 border-2 border-amber-200 mb-6 text-left">
-            <AlertCircle className="w-5 h-5 text-amber-600" />
-            <span className="text-amber-700">
-              Please configure your Resend API Key in{' '}
-              <Link href="/settings" className="underline font-bold">Settings</Link>
-            </span>
-          </div>
+        {!settings.apiKey && !error && (
+          <SmartAlert errorCode="API_KEY_MISSING" className="mb-6 text-left" />
         )}
 
         <Send className="w-16 h-16 mx-auto mb-4 text-neo-green" />
