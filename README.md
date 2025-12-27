@@ -8,9 +8,9 @@
 [![Resend](https://img.shields.io/badge/Resend-Email_API-000000)](https://resend.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?logo=vercel&logoColor=white)](https://christmas-greeting-email.vercel.app/)
 
-A visual email template platform for creating and sending beautiful holiday greetings, marketing emails, and newsletters. Features a bold **Neobrutalism** design style with an intuitive drag-and-drop editor.
+A visual email template platform for creating and sending beautiful holiday greetings, marketing emails, and newsletters. Features a bold **Neobrutalism** design style with an intuitive block-based editor.
 
-## 🌐 Live Demo
+## Live Demo
 
 **[https://christmas-greeting-email.vercel.app/](https://christmas-greeting-email.vercel.app/)**
 
@@ -18,37 +18,45 @@ No installation required! Use the platform directly in your browser.
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎨 Visual Template Editor
-- **Block-based editing** - Drag and drop content blocks
-- **Real-time preview** - See changes instantly
-- **Device preview** - Desktop and mobile views
-- **Theme customization** - Colors, typography, and spacing
+### Visual Template Editor
+- **Block-based editing** - Add, remove, and reorder content blocks
+- **Real-time preview** - See changes instantly in the canvas
+- **Device preview** - Toggle between desktop (600px) and mobile (375px) views
+- **Theme customization** - Full color palette with color pickers
+- **Undo/Redo** - Full history tracking with up to 50 states
+- **Auto-save** - Templates persist to browser localStorage
 
-### 📧 Email Templates
-- **Holiday Greetings** - Christmas, New Year, Chinese New Year, Birthday
-- **Marketing Emails** - Product launches, promotions
-- **Newsletters** - Weekly digest, company updates
+### Email Templates
+- **6 Preset Templates** - Ready-to-use professionally designed templates
+- **Custom Templates** - Create new templates from scratch
+- **Template Copying** - Duplicate any template for customization
+- **Category Filtering** - Filter by Holiday, Marketing, or Newsletter
 
-### 👥 Contact Management
-- **Local storage** - Contacts saved in your browser
-- **Resend sync** - Import/export with Resend Audiences
-- **Bulk operations** - Add, edit, delete multiple contacts
+### Contact Management
+- **Manual Entry** - Add contacts one by one with form validation
+- **CSV Import** - Bulk import contacts from spreadsheet files
+- **Resend Sync** - Import contacts from Resend Audiences
+- **Edit & Delete** - Full CRUD operations with modal dialogs
+- **Search** - Filter contacts by email, first name, or last name
 
-### 🚀 Easy Sending
-- **Step-by-step wizard** - Guided email sending process
+### Email Sending
+- **5-Step Wizard** - Guided process from template to send
+- **Recipient Selection** - Choose individual or all contacts
 - **Personalization** - Dynamic variables like `{{recipientName}}`
-- **Batch sending** - Send to multiple recipients
+- **Real Preview** - See actual rendered email before sending
+- **Progress Tracking** - Visual progress bar during batch sending
+- **Result Summary** - Per-recipient success/failure reporting
 
-### 🎯 User-Friendly Design
+### User-Friendly Design
 - **No coding required** - Visual interface for non-technical users
-- **Neobrutalism UI** - Bold, modern design aesthetic
+- **Neobrutalism UI** - Bold borders, hard shadows, vibrant colors
 - **Responsive layout** - Works on desktop and tablet
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ### Application Overview
 
@@ -69,7 +77,7 @@ graph TB
         RESEND[Resend API]
     end
 
-    UI -->|Settings, Templates| LS
+    UI -->|Settings, Templates, Contacts| LS
     UI -->|API Requests| API
     API -->|Send Email| RESEND
     API -->|Render HTML| RENDER
@@ -117,24 +125,28 @@ sequenceDiagram
     Browser->>Browser: Save to LocalStorage
 
     User->>Browser: Click "Send Email"
-    Browser->>API: POST /api/send
-    Note over API: Render template to HTML
-    API->>Resend: Send via Resend API
-    Resend-->>API: Success/Error
-    API-->>Browser: Response
-    Browser-->>User: Show result
+    loop For Each Recipient
+        Browser->>API: POST /api/preview
+        API-->>Browser: Personalized HTML
+        Browser->>API: POST /api/send
+        API->>Resend: Send via Resend API
+        Resend-->>API: Success/Error
+        API-->>Browser: Response
+    end
+    Browser-->>User: Show results
 ```
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Option 1: Use the Deployed Version (Recommended)
 
 1. Visit **[https://christmas-greeting-email.vercel.app/](https://christmas-greeting-email.vercel.app/)**
 2. Go to **Settings** and enter your Resend API Key
-3. Add your contacts
-4. Choose a template and start sending!
+3. Add your contacts (manually, CSV, or sync from Resend)
+4. Choose a template and customize it
+5. Use the Send wizard to send emails!
 
 ### Option 2: Run Locally
 
@@ -158,7 +170,7 @@ npm run dev
 
 ---
 
-## 📖 User Guide
+## User Guide
 
 For detailed usage instructions, see **[TUTORIAL.md](./TUTORIAL.md)**.
 
@@ -166,39 +178,37 @@ Quick overview:
 
 | Step | Action | Description |
 |------|--------|-------------|
-| 1 | Configure Settings | Enter your Resend API Key |
-| 2 | Add Contacts | Add recipients manually or sync from Resend |
-| 3 | Choose Template | Select from preset templates |
-| 4 | Customize | Edit content, colors, and images |
-| 5 | Preview | Check how the email looks |
-| 6 | Send | Use the wizard to send emails |
+| 1 | Configure Settings | Enter Resend API Key, sender email, and name |
+| 2 | Add Contacts | Add manually, import CSV, or sync from Resend |
+| 3 | Choose Template | Select from 6 presets or create your own |
+| 4 | Customize | Edit blocks, change colors, add images |
+| 5 | Preview | Check desktop/mobile views and real rendering |
+| 6 | Send | Use the 5-step wizard with progress tracking |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| [Next.js](https://nextjs.org/) | 15 | React framework with App Router |
+| [Next.js](https://nextjs.org/) | 15.5 | React framework with App Router |
 | [React](https://react.dev/) | 19 | UI component library |
 | [TypeScript](https://www.typescriptlang.org/) | 5.7 | Type safety |
 | [Tailwind CSS](https://tailwindcss.com/) | 3.4 | Utility-first CSS |
 | [shadcn/ui](https://ui.shadcn.com/) | - | UI component system |
-| [Zustand](https://zustand-demo.pmnd.rs/) | 5.0 | State management |
-| [dnd-kit](https://dndkit.com/) | 6.1 | Drag and drop |
 | [Lucide React](https://lucide.dev/) | 0.468 | Icon library |
 
 ### Backend & Services
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| [React Email](https://react.email/) | 0.0.31 | Email template components |
+| [React Email](https://react.email/) | 0.0.31 | Email template rendering |
 | [Resend](https://resend.com/) | 4.0.1 | Email delivery API |
 | [Vercel](https://vercel.com/) | - | Hosting & serverless functions |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 email-template-platform/
@@ -207,11 +217,11 @@ email-template-platform/
 │   ├── layout.tsx                # Root layout with sidebar
 │   ├── globals.css               # Global styles + Tailwind
 │   ├── templates/
-│   │   ├── page.tsx              # Template library
-│   │   └── [id]/edit/page.tsx    # Visual editor
-│   ├── contacts/page.tsx         # Contact management
-│   ├── send/page.tsx             # Sending wizard
-│   ├── settings/page.tsx         # Configuration
+│   │   ├── page.tsx              # Template library with filtering
+│   │   └── [id]/edit/page.tsx    # Visual editor with undo/redo
+│   ├── contacts/page.tsx         # Contact management with CSV import
+│   ├── send/page.tsx             # 5-step sending wizard
+│   ├── settings/page.tsx         # Configuration page
 │   └── api/
 │       ├── send/route.ts         # Email sending endpoint
 │       ├── contacts/route.ts     # Resend contacts sync
@@ -224,75 +234,62 @@ email-template-platform/
 │   └── utils.ts                  # Utility functions
 ├── types/
 │   └── template.ts               # TypeScript definitions
-├── src/                          # Legacy CLI tools
-│   ├── config.ts
-│   ├── index.ts
-│   ├── contacts.ts
-│   ├── preview.ts
-│   └── templates/
-│       └── christmas-email.tsx
 └── public/                       # Static assets
 ```
 
 ---
 
-## 🎨 Template System
+## Template System
 
 ### Preset Templates
 
 | Template | Type | Description |
 |----------|------|-------------|
-| 🎄 Classic Christmas | Holiday | Neobrutalism-styled Christmas greeting |
-| 🎆 New Year 2025 | Holiday | Purple and gold celebration theme |
-| 🧧 Chinese New Year | Holiday | Traditional red and gold design |
-| 🎂 Birthday Wishes | Holiday | Colorful birthday celebration |
-| 🚀 Product Launch | Marketing | Bold product announcement |
-| 📰 Weekly Newsletter | Newsletter | Clean, professional digest |
+| Classic Christmas | Holiday | Red and green Neobrutalism Christmas greeting |
+| New Year 2025 | Holiday | Purple and gold celebration theme |
+| Chinese New Year | Holiday | Traditional red and gold with Year of the Snake |
+| Birthday Wishes | Holiday | Pink and purple colorful celebration |
+| Product Launch | Marketing | Gold and blue bold announcement |
+| Weekly Newsletter | Newsletter | Green professional digest layout |
 
 ### Block Types
 
-```mermaid
-graph LR
-    subgraph "Content Blocks"
-        HEADER[Header]
-        TEXT[Text]
-        IMAGE[Image]
-        BUTTON[Button]
-    end
-
-    subgraph "Layout Blocks"
-        WISHES[Wishes List]
-        DIVIDER[Divider]
-        SPACER[Spacer]
-    end
-
-    subgraph "Footer Blocks"
-        FOOTER[Footer/Signature]
-    end
-
-    style HEADER fill:#DC2626,color:#fff
-    style TEXT fill:#16A34A,color:#fff
-    style IMAGE fill:#F59E0B,color:#fff
-    style BUTTON fill:#3B82F6,color:#fff
-    style WISHES fill:#EC4899,color:#fff
-    style DIVIDER fill:#6B7280,color:#fff
-    style SPACER fill:#9CA3AF,color:#fff
-    style FOOTER fill:#7C3AED,color:#fff
-```
+| Block | Description | Editable Properties |
+|-------|-------------|---------------------|
+| **Header** | Title section with subtitle | title, subtitle |
+| **Text** | Paragraph content | content (supports variables) |
+| **Image** | Photo or graphic | src (URL), alt text |
+| **Button** | Call-to-action link | text, url |
+| **Wishes List** | Bulleted list with icons | title, items (icon + text) |
+| **Divider** | Horizontal separator | (uses theme border settings) |
+| **Footer** | Sender signature | senderLabel, senderName |
 
 ### Theme Configuration
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| `primaryColor` | `#DC2626` | Main accent color (red) |
-| `secondaryColor` | `#16A34A` | Secondary color (green) |
-| `accentColor` | `#F59E0B` | Highlight color (gold) |
-| `borderWidth` | `4px` | Neobrutalism border thickness |
-| `shadowOffset` | `8px` | Hard shadow offset |
+| `primaryColor` | `#DC2626` | Headers, accents (red) |
+| `secondaryColor` | `#16A34A` | Buttons, footers (green) |
+| `accentColor` | `#F59E0B` | Highlights (gold) |
+| `backgroundColor` | `#1a1a2e` | Email body background |
+| `surfaceColor` | `#FFFBEB` | Content area background |
+| `textColor` | `#000000` | Body text color |
+| `borderColor` | `#000000` | Neobrutalism borders |
+| `borderWidth` | `4` | Border thickness (px) |
+| `shadowOffset` | `8` | Hard shadow offset (px) |
+
+### Personalization Variables
+
+| Variable | Description | Example Output |
+|----------|-------------|----------------|
+| `{{recipientName}}` | Recipient's first name or email prefix | "John" |
+| `{{senderName}}` | Configured sender name | "Jane Smith" |
+| `{{currentYear}}` | Current year | "2025" |
+| `{{nextYear}}` | Next year | "2026" |
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### POST `/api/send`
 
@@ -302,10 +299,10 @@ Send an email via Resend.
 // Request body
 {
   apiKey: string,      // Resend API key
-  from: string,        // Sender email
-  to: string | string[],
-  subject: string,
-  html: string         // Rendered HTML
+  from: string,        // Sender email (verified domain)
+  to: string,          // Recipient email
+  subject: string,     // Email subject
+  html: string         // Rendered HTML content
 }
 
 // Response
@@ -322,15 +319,15 @@ List contacts from Resend Audience.
 
 ```typescript
 // Query params
-?apiKey=re_xxx&audienceId=xxx
+?apiKey=re_xxx&audienceId=aud_xxx
 
 // Response
 {
   success: boolean,
   contacts: Array<{
     email: string,
-    firstName?: string,
-    lastName?: string
+    first_name?: string,
+    last_name?: string
   }>
 }
 ```
@@ -356,21 +353,22 @@ Render template blocks to HTML.
 
 ---
 
-## 🔐 Security
+## Security
 
 ### Data Storage
-- **API keys** are stored in browser localStorage only
-- **No server-side storage** of user credentials
-- **API keys** are sent per-request and not persisted on server
+- **All data stored locally** - Settings, contacts, templates in browser localStorage
+- **No server-side storage** - Nothing persisted on the server
+- **API keys sent per-request** - Not stored on server, sent directly to Resend
 
 ### Best Practices
 - Use environment variables for local development
 - Never commit `.env` files to version control
 - Create separate Resend API keys for development/production
+- Verify your sending domain in Resend for production use
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -382,13 +380,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👤 Author
+## Author
 
 **Chan Meng**
 
@@ -398,7 +396,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [Resend](https://resend.com/) - Email delivery API
 - [React Email](https://react.email/) - Email template components

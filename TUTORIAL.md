@@ -70,10 +70,10 @@ graph TD
 ```
 
 **Navigation Sidebar** (left side):
-- **Home** - Dashboard overview
-- **Templates** - Browse and edit email templates
+- **Home** - Dashboard overview with quick actions
+- **Templates** - Browse, create, and edit email templates
 - **Contacts** - Manage your recipients
-- **Send** - Send email campaigns
+- **Send** - 5-step email sending wizard
 - **Settings** - Configure API keys and sender info
 
 ---
@@ -113,7 +113,7 @@ flowchart LR
    - Click "Create"
 6. **Copy Your Key**: Your API key will look like `re_xxxxxxxxxx`
 
-> ⚠️ **Important**: Save your API key securely. It will only be shown once!
+> **Important**: Save your API key securely. It will only be shown once!
 
 ### 2.2 Verifying Your Domain (Optional but Recommended)
 
@@ -132,7 +132,7 @@ To send emails from your own domain (e.g., `hello@yourdomain.com`):
 5. Wait 5-30 minutes for DNS propagation
 6. Click "Verify" in Resend Dashboard
 
-> 💡 **Tip**: If you don't have a domain, you can use `onboarding@resend.dev` for testing (only sends to your own email).
+> **Tip**: If you don't have a domain, you can use `onboarding@resend.dev` for testing (only sends to your own email).
 
 ### 2.3 Configuring the Platform
 
@@ -144,7 +144,7 @@ To send emails from your own domain (e.g., `hello@yourdomain.com`):
 | **Resend API Key** | Your API key from Step 2.1 | `re_AbCdEf123456...` |
 | **Sender Email** | Your verified sender address | `hello@yourdomain.com` |
 | **Sender Name** | Display name for recipients | `John Smith` |
-| **Audience ID** (optional) | For syncing contacts | `dc18b68d-cd0a-...` |
+| **Audience ID** (optional) | For syncing contacts from Resend | `aud_dc18b68d...` |
 
 3. Click **Save Settings**
 
@@ -165,7 +165,7 @@ sequenceDiagram
 
 ## 3. Managing Contacts
 
-The Contacts page lets you manage all your email recipients.
+The Contacts page lets you manage all your email recipients with full CRUD capabilities.
 
 ### 3.1 Adding Contacts Manually
 
@@ -192,15 +192,17 @@ flowchart LR
 ### 3.2 Editing Contacts
 
 1. Find the contact in the list
-2. Click the **Edit** icon (pencil)
-3. Modify the information
-4. Click **Save**
+2. Click the **Edit** icon (pencil) on the right
+3. A modal dialog will appear with the contact's current information
+4. Modify the email, first name, or last name
+5. Click **Save Changes**
 
 ### 3.3 Deleting Contacts
 
 1. Find the contact in the list
-2. Click the **Delete** icon (trash)
-3. Confirm deletion
+2. Click the **Delete** icon (trash) on the right
+3. Confirm the deletion in the dialog
+4. The contact will be removed
 
 ### 3.4 Searching Contacts
 
@@ -209,61 +211,80 @@ Use the search bar at the top to filter contacts by:
 - First name
 - Last name
 
-### 3.5 Syncing with Resend Audience (Advanced)
+The list updates in real-time as you type.
+
+### 3.5 Importing from CSV
+
+Bulk import contacts from a spreadsheet file:
+
+1. Click the **Import CSV** button
+2. Select a CSV file from your computer
+3. The system will automatically detect columns:
+   - **email** - Required column
+   - **firstName**, **first_name**, or **name** - Optional
+   - **lastName**, **last_name**, or **surname** - Optional
+4. New contacts are added (duplicates are skipped)
+5. A success message shows how many were imported
+
+**Expected CSV format:**
+```csv
+email,firstName,lastName
+john@example.com,John,Doe
+jane@example.com,Jane,Smith
+bob@company.com,Bob,Johnson
+```
+
+**Notes:**
+- The first row must be headers
+- Quoted values are supported
+- Invalid emails are skipped
+- Existing emails are not duplicated
+
+### 3.6 Syncing with Resend Audience
 
 If you have an Audience ID configured in Settings:
 
-1. Click **Sync Resend** button
-2. Contacts will be imported from your Resend Audience
-3. Any changes will sync back to Resend
+1. Click the **Sync Resend** button
+2. The platform fetches contacts from your Resend Audience
+3. New contacts are merged with your existing list
+4. A success message shows how many were imported
 
 ```mermaid
 sequenceDiagram
     participant Platform
     participant Resend API
 
-    Platform->>Resend API: GET /contacts
+    Platform->>Resend API: GET /audiences/{id}/contacts
     Resend API-->>Platform: Contact List
-    Platform->>Platform: Update Local Storage
+    Platform->>Platform: Merge with Local Storage
     Platform-->>User: Show Updated List
-```
-
-### 3.6 Importing from CSV (Coming Soon)
-
-Click **Import CSV** to bulk import contacts from a spreadsheet.
-
-Expected CSV format:
-```csv
-email,firstName,lastName
-john@example.com,John,Doe
-jane@example.com,Jane,Smith
 ```
 
 ---
 
 ## 4. Working with Templates
 
-The Templates page displays all available email templates.
+The Templates page displays all available email templates with filtering and management capabilities.
 
 ### 4.1 Template Categories
+
+Templates are organized into three categories:
 
 ```mermaid
 graph TB
     subgraph "Holiday Templates"
-        XMAS[🎄 Christmas]
-        NY[🎆 New Year]
-        CNY[🧧 Chinese New Year]
-        BDAY[🎂 Birthday]
+        XMAS[Classic Christmas]
+        NY[New Year 2025]
+        CNY[Chinese New Year]
+        BDAY[Birthday Wishes]
     end
 
     subgraph "Marketing Templates"
-        LAUNCH[🚀 Product Launch]
-        PROMO[💰 Promotion]
+        LAUNCH[Product Launch]
     end
 
     subgraph "Newsletter Templates"
-        WEEKLY[📰 Weekly Digest]
-        UPDATE[📢 Company Update]
+        WEEKLY[Weekly Newsletter]
     end
 
     style XMAS fill:#DC2626,color:#fff
@@ -271,28 +292,49 @@ graph TB
     style CNY fill:#EF4444,color:#fff
     style BDAY fill:#EC4899,color:#fff
     style LAUNCH fill:#F59E0B,color:#fff
-    style PROMO fill:#10B981,color:#fff
-    style WEEKLY fill:#3B82F6,color:#fff
-    style UPDATE fill:#6366F1,color:#fff
+    style WEEKLY fill:#16A34A,color:#fff
 ```
 
 ### 4.2 Browsing Templates
 
 1. Go to **Templates** in the sidebar
 2. Use the filter tabs to narrow down:
-   - **All** - Show all templates
-   - **Holiday** - Greeting cards
+   - **All** - Show all templates (preset + custom)
+   - **Holiday** - Greeting cards and celebrations
    - **Marketing** - Promotional emails
    - **Newsletter** - Regular updates
-3. Hover over a template to see options:
-   - **Edit** - Open in visual editor
-   - **Copy** - Duplicate the template
+3. The count badge shows how many templates match each filter
+4. Hover over a template card to see action buttons
 
-### 4.3 Selecting a Template
+### 4.3 Creating a New Template
 
-1. Click on any template card
-2. You'll be taken to the visual editor
-3. Customize the template to your needs
+1. Click the **Create Template** button (top right)
+2. A new blank template is created with:
+   - Default header block
+   - Text block with placeholder
+   - Footer block
+3. You're automatically redirected to the visual editor
+4. Customize the template to your needs
+5. Click **Save** to keep your changes
+
+### 4.4 Copying a Template
+
+Duplicate any template (preset or custom) to create your own version:
+
+1. Hover over the template card
+2. Click the **Copy** icon
+3. A new template is created with "(Copy)" suffix
+4. The copy appears in your template list
+5. Edit the copy without affecting the original
+
+### 4.5 Deleting Custom Templates
+
+Only custom templates can be deleted (presets are permanent):
+
+1. Hover over the custom template card
+2. Click the **Delete** icon (trash)
+3. Confirm the deletion
+4. The template is permanently removed
 
 ---
 
@@ -305,9 +347,9 @@ The Visual Editor is the heart of the platform, allowing you to customize email 
 ```mermaid
 graph LR
     subgraph "Editor Interface"
-        LEFT[Block Palette<br/>Add new blocks]
-        CENTER[Canvas<br/>Edit content]
-        RIGHT[Properties<br/>Customize selected]
+        LEFT[Block Palette<br/>Add & manage blocks]
+        CENTER[Canvas<br/>Visual preview]
+        RIGHT[Properties Panel<br/>Edit selected item]
     end
 
     LEFT --> CENTER
@@ -322,45 +364,62 @@ The editor has three main panels:
 
 | Panel | Location | Purpose |
 |-------|----------|---------|
-| **Block Palette** | Left | Add new content blocks |
-| **Canvas** | Center | View and edit your email |
-| **Properties Panel** | Right | Customize selected block |
+| **Block Palette** | Left | Add new blocks and see block list |
+| **Canvas** | Center | Visual preview of your email |
+| **Properties Panel** | Right | Edit selected block or theme |
 
-### 5.2 Available Blocks
+### 5.2 Toolbar Features
 
-| Block | Icon | Description |
-|-------|------|-------------|
-| **Header** | 📝 | Title and subtitle section |
-| **Text** | 📄 | Paragraph or content text |
-| **Image** | 🖼️ | Photo or graphic |
-| **Button** | 🔘 | Call-to-action link |
-| **Wishes List** | ⭐ | Bulleted list with icons |
-| **Divider** | ➖ | Horizontal separator |
-| **Footer** | 📍 | Sender signature |
+The toolbar at the top provides:
 
-### 5.3 Adding a Block
+| Button | Function |
+|--------|----------|
+| **Back Arrow** | Return to Templates page |
+| **Template Name** | Click to rename your template |
+| **Subject Line** | Edit the email subject |
+| **Undo** | Undo last change (up to 50 steps) |
+| **Redo** | Redo undone change |
+| **Desktop** | Preview at 600px width |
+| **Mobile** | Preview at 375px width |
+| **Preview** | Open full email preview modal |
+| **Save** | Save template to browser storage |
 
-1. In the left panel, find the block type you want
-2. Click the **+** button next to it
-3. The block will be added to your email
+### 5.3 Available Blocks
+
+| Block | Icon | Description | Properties |
+|-------|------|-------------|------------|
+| **Header** | Type | Title and subtitle section | title, subtitle |
+| **Text** | Type | Paragraph or content | content |
+| **Image** | Image | Photo or graphic | src (URL), alt |
+| **Button** | Pointer | Call-to-action link | text, url |
+| **Wishes List** | List | Bulleted list with icons | title, items |
+| **Divider** | Line | Horizontal separator | (none) |
+| **Footer** | Signature | Sender signature | senderLabel, senderName |
+
+### 5.4 Adding a Block
+
+1. In the left panel, find the block type you want under "Add Blocks"
+2. Click the block row (or the + icon)
+3. The block is added to the bottom of your email
+4. The block is automatically selected for editing
 
 ```mermaid
 flowchart LR
-    A[Choose Block Type] --> B[Click Add]
+    A[Choose Block Type] --> B[Click to Add]
     B --> C[Block Appears in Canvas]
-    C --> D[Click Block to Select]
+    C --> D[Block Auto-Selected]
     D --> E[Edit in Properties Panel]
 
     style A fill:#FEF3C7
     style E fill:#D1FAE5
 ```
 
-### 5.4 Editing a Block
+### 5.5 Editing a Block
 
 1. Click on any block in the canvas
-2. The block will be highlighted
-3. The Properties Panel (right) will show editing options
-4. Make your changes - they save automatically
+2. The block will be highlighted with a red border
+3. The Properties Panel (right) shows editing options
+4. Make your changes - they appear immediately in the canvas
 
 **Example: Editing a Header Block**
 
@@ -369,42 +428,64 @@ flowchart LR
 | **Subtitle** | Small text above the title |
 | **Title** | Main heading text |
 
-**Example: Editing a Text Block**
+**Example: Editing a Wishes List Block**
 
 | Property | Description |
 |----------|-------------|
-| **Content** | The main text content |
+| **Section Title** | Heading for the wishes section |
+| **Wish Items** | Each item has an icon + text |
+| **Add Wish** | Button to add new items |
+| **Delete** | Trash icon to remove items |
 
-### 5.5 Reordering Blocks
+### 5.6 Managing Blocks
 
-1. In the left panel's "Blocks in Template" section
-2. Drag blocks up or down to reorder
-3. The canvas will update automatically
+In the left panel's "Blocks in Template" section:
 
-### 5.6 Deleting a Block
+- **Click** a block to select it
+- **Trash icon** removes the block
+- Blocks are listed in order from top to bottom
 
-1. Find the block in the left panel list
+### 5.7 Deleting a Block
+
+1. Find the block in the left panel's block list
 2. Click the trash icon next to it
-3. The block will be removed
+3. The block is immediately removed
+4. Use **Undo** if you made a mistake
 
-### 5.7 Customizing Theme
+### 5.8 Undo and Redo
+
+The editor maintains a history of up to 50 changes:
+
+- **Undo** (or the button) - Go back one step
+- **Redo** (or the button) - Go forward one step
+- History is preserved until you leave the page
+
+### 5.9 Customizing Theme
 
 When no block is selected, the Properties Panel shows theme options:
 
 | Property | Description |
 |----------|-------------|
-| **Primary Color** | Main brand color (headers, accents) |
-| **Secondary Color** | Supporting color (buttons, footers) |
-| **Accent Color** | Highlight color (special elements) |
+| **Primary Color** | Headers, accents (default: red) |
+| **Secondary Color** | Buttons, footers (default: green) |
+| **Accent Color** | Highlights (default: gold) |
+| **Background Color** | Email body background |
+| **Surface Color** | Content area background |
+| **Border Width** | Neobrutalism border thickness (1-10px) |
+| **Shadow Offset** | Hard shadow distance (0-20px) |
 
-### 5.8 Using Variables
+Each color has:
+- A **color picker** (click the square)
+- A **hex input** (type exact value)
 
-You can personalize emails using variables:
+### 5.10 Using Variables
+
+You can personalize emails using variables that get replaced when sending:
 
 | Variable | Description | Example Output |
 |----------|-------------|----------------|
 | `{{recipientName}}` | Recipient's first name | "John" |
-| `{{senderName}}` | Your name | "Jane Smith" |
+| `{{senderName}}` | Your configured name | "Jane Smith" |
 | `{{currentYear}}` | Current year | "2025" |
 | `{{nextYear}}` | Next year | "2026" |
 
@@ -418,23 +499,33 @@ Best regards,
 {{senderName}}
 ```
 
-### 5.9 Preview Modes
+### 5.11 Preview Modes
 
-Use the toolbar to switch between:
-- **Desktop** - Full-width preview (600px)
-- **Mobile** - Mobile preview (375px)
+**Canvas Preview:**
+- Use the Desktop/Mobile toggle in the toolbar
+- Desktop shows 600px width
+- Mobile shows 375px width
 
-### 5.10 Saving Your Template
+**Full Preview:**
+1. Click the **Preview** button in the toolbar
+2. A modal opens with the rendered email
+3. Shows exactly what recipients will see
+4. Variables are replaced with sample values
+5. Click X or outside to close
+
+### 5.12 Saving Your Template
 
 1. Click the **Save** button in the toolbar
-2. Your template is saved to browser storage
-3. It will be available next time you visit
+2. The button shows "Saving..." briefly
+3. Then shows "Saved!" with a checkmark
+4. Your template is saved to browser localStorage
+5. It will be available next time you visit
 
 ---
 
 ## 6. Sending Emails
 
-The Send page guides you through the email sending process.
+The Send page provides a 5-step wizard to guide you through sending emails.
 
 ### 6.1 Sending Workflow
 
@@ -455,41 +546,50 @@ flowchart LR
 ### 6.2 Step 1: Select Template
 
 1. Go to **Send** in the sidebar
-2. Browse available templates
+2. Browse all available templates (presets + custom)
 3. Click on the template you want to use
-4. Click **Next**
+4. The selected template shows a green highlight
+5. Click **Next**
 
 ### 6.3 Step 2: Choose Recipients
 
-1. View your contact list
-2. Check the boxes next to recipients
-3. Or click "Select All" to choose everyone
-4. Click **Next**
+1. View your contact list (loaded from Contacts page)
+2. Click on contacts to select/deselect them
+3. Use **Select All** to choose everyone
+4. Use **Deselect All** to clear selection
+5. The count shows "X of Y contacts selected"
+6. Click **Next**
 
-> 💡 **Tip**: Make sure you've added contacts in the Contacts page first!
+> **Tip**: If no contacts appear, go to the Contacts page first and add some!
 
 ### 6.4 Step 3: Enter Subject
 
-1. Type your email subject line
-2. You can use variables like `{{recipientName}}`
-3. Example: "🎄 Happy Holidays, {{recipientName}}!"
-4. Click **Next**
+1. The subject is pre-filled from the template's default
+2. Modify the subject as needed
+3. You can use variables like `{{recipientName}}`
+4. Example: "Happy Holidays, {{recipientName}}!"
+5. Click **Next**
 
 ### 6.5 Step 4: Preview Email
 
-1. Review how your email will look
-2. Check the recipient count
-3. Verify the subject line
-4. Click **Next** if everything looks good
+1. See the actual rendered email
+2. A contact selector lets you preview for different recipients
+3. The subject line shows with variables replaced
+4. Verify everything looks correct
+5. Click **Next** to proceed to sending
 
 ### 6.6 Step 5: Send
 
-1. Review the final summary:
-   - Template name
-   - Subject line
-   - Number of recipients
-2. Click **Send Emails**
-3. Wait for confirmation
+**Before Sending:**
+- Verify your settings are configured (API Key, Sender Email)
+- Review the summary: From, Subject, Recipients
+- A warning appears if settings are missing
+
+**Sending Process:**
+1. Click the **Send X Emails** button
+2. A progress bar shows sending status
+3. Each email is sent individually with personalization
+4. A 300ms delay between emails prevents rate limiting
 
 ```mermaid
 sequenceDiagram
@@ -499,19 +599,45 @@ sequenceDiagram
     participant Resend
 
     User->>Platform: Click Send
-    Platform->>API: POST /api/send
-    API->>API: Render Template
-    API->>Resend: Send Email
-    Resend-->>API: Success
-    API-->>Platform: Response
-    Platform-->>User: Show Success
+    loop For Each Recipient
+        Platform->>API: POST /api/preview (personalized)
+        API-->>Platform: HTML
+        Platform->>API: POST /api/send
+        API->>Resend: Send Email
+        Resend-->>API: Success/Error
+        API-->>Platform: Response
+        Platform->>Platform: Update Progress
+    end
+    Platform-->>User: Show Results
 ```
 
 ### 6.7 Understanding Send Results
 
-After sending, you'll see:
-- ✅ **Sent**: Successfully delivered to Resend
-- ❌ **Failed**: Error occurred (check error message)
+After sending completes:
+
+**Success View:**
+- Green checkmark icon
+- "All Emails Sent!" message
+- Count of successfully sent emails
+
+**Partial Success View:**
+- Yellow warning icon
+- "Sending Complete" message
+- Counts for success and failure
+
+**Results List:**
+Each recipient shows:
+- **Green checkmark** - Successfully sent
+- **Red X** - Failed (with error message)
+
+**Common Errors:**
+- "Invalid API key" - Check your Settings
+- "Domain not verified" - Verify in Resend dashboard
+- "Rate limit exceeded" - Wait and try again
+
+**After Sending:**
+- Click **Back to Dashboard** to return home
+- Check Resend dashboard for delivery status
 
 ---
 
@@ -552,18 +678,27 @@ After sending, you'll see:
 
 **Solution**:
 1. Go to Contacts page
-2. Click Add Contact
-3. Add at least one recipient
+2. Add contacts manually, import CSV, or sync from Resend
+3. Return to Send wizard
 
 #### "Email not received"
 
 **Problem**: Email may be in spam or delayed.
 
 **Solutions**:
-1. Check recipient's spam folder
+1. Check recipient's spam/junk folder
 2. Verify the email address is correct
 3. Wait a few minutes (emails can be delayed)
 4. Check Resend Dashboard for delivery status
+
+#### "Failed to render preview"
+
+**Problem**: Template has invalid data.
+
+**Solution**:
+1. Go to the Editor and check all blocks
+2. Ensure image URLs are valid HTTPS links
+3. Save the template and try again
 
 ### 7.2 Browser Issues
 
@@ -584,6 +719,13 @@ After sending, you'll see:
 3. Disable ad blockers
 4. Check internet connection
 
+#### Slow Performance
+
+**Solutions**:
+1. Close other browser tabs
+2. Clear browser cache
+3. Use a modern browser version
+
 ---
 
 ## 8. FAQ
@@ -600,46 +742,72 @@ A: No! Just visit the website and start using it. No downloads or installations 
 
 **Q: Where is my data stored?**
 
-A: All your data (settings, contacts, templates) is stored in your browser's localStorage. It's never uploaded to any server.
+A: All your data (settings, contacts, templates) is stored in your browser's localStorage. It's never uploaded to any server except when sending emails.
 
 **Q: Is my API key secure?**
 
 A: Your API key is stored only in your browser and sent directly to Resend when needed. It's never stored on our servers.
 
+**Q: Can multiple people use the same account?**
+
+A: The platform uses browser storage, so each browser/device has its own data. For team use, each person needs their own Resend API key.
+
 ### Templates
 
 **Q: Can I create my own templates from scratch?**
 
-A: Yes! Click "Create Template" on the Templates page to start with a blank canvas.
+A: Yes! Click "Create Template" on the Templates page to start with a basic template, then customize it in the editor.
 
 **Q: Can I import HTML templates?**
 
-A: Currently, the platform uses a block-based system. Direct HTML import is not supported yet.
+A: Currently, the platform uses a block-based system. Direct HTML import is not supported, but you can recreate templates using blocks.
 
 **Q: Why do my images not show?**
 
-A: Images must be hosted on a public URL (HTTPS). Use services like:
-- Vercel Blob
-- Cloudinary
+A: Images must be hosted on a public HTTPS URL. Use services like:
 - Imgur
+- Cloudinary
 - AWS S3
+- Your own website
+
+**Q: How do I change the template colors?**
+
+A: In the editor, click anywhere outside the blocks to deselect them. The Properties Panel will show theme settings including color pickers.
+
+### Contacts
+
+**Q: What CSV format is supported?**
+
+A: The CSV must have a header row with an "email" column. Columns for "firstName" and "lastName" are optional. Standard CSV format with commas is supported.
+
+**Q: Can I export my contacts?**
+
+A: Currently, contacts are stored in browser localStorage. You can sync with Resend Audiences to back them up in your Resend account.
+
+**Q: How do I delete all contacts?**
+
+A: Delete contacts one by one using the trash icon. For a complete reset, clear your browser's localStorage for this site.
 
 ### Sending
 
 **Q: Is there a limit on how many emails I can send?**
 
 A: The platform itself has no limit. Your limit depends on your Resend plan:
-- Free: 3,000 emails/month
+- Free: 3,000 emails/month, 100/day
 - Pro: 50,000 emails/month
 - Enterprise: Unlimited
 
 **Q: Can I schedule emails?**
 
-A: This feature is coming soon! Currently, emails are sent immediately.
+A: This feature is not available yet. Currently, emails are sent immediately.
 
 **Q: Can I track email opens and clicks?**
 
 A: Tracking is available through your Resend Dashboard at [resend.com/emails](https://resend.com/emails).
+
+**Q: What happens if sending fails?**
+
+A: The wizard shows which emails succeeded and failed. Failed emails show the error reason. You can try sending again.
 
 ### Technical
 
@@ -653,11 +821,11 @@ A: Modern browsers including:
 
 **Q: Can I use this on mobile?**
 
-A: The platform is optimized for desktop and tablet. Mobile editing is limited but possible.
+A: The platform is optimized for desktop and tablet. Mobile editing is limited but possible for basic operations.
 
 **Q: Can I self-host this platform?**
 
-A: Yes! Clone the GitHub repository and deploy to Vercel or any Node.js hosting platform.
+A: Yes! Clone the GitHub repository and deploy to Vercel or any Node.js hosting platform. See the README for instructions.
 
 ---
 
