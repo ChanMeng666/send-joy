@@ -3,6 +3,11 @@ node_modules/
 
 # Build output
 dist/
+.next/
+out/
+
+# Next.js
+next-env.d.ts
 
 # Environment variables (SENSITIVE - never commit!)
 .env
@@ -29,3 +34,4 @@ Thumbs.db
 
 # Claude Code
 .claude/
+nul
