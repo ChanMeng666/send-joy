@@ -93,7 +93,7 @@ export const ERROR_MESSAGES: Record<string, ErrorMessage> = {
 
   CONTACTS_SYNC_FAILED: {
     title: 'Sync Failed',
-    description: 'Could not sync contacts from Resend. Please check your API Key and Audience ID are configured correctly.',
+    description: 'Could not sync contacts from Resend. Please check your API Key and Segment ID are configured correctly.',
     severity: 'error',
     action: {
       text: 'Check Settings',
@@ -101,14 +101,14 @@ export const ERROR_MESSAGES: Record<string, ErrorMessage> = {
     },
     suggestions: [
       'Verify your API key is correct',
-      'Make sure your Audience ID is valid',
-      'Check that you have contacts in the Resend Audience',
+      'Make sure your Segment ID is valid (find it at resend.com/audience → Segments)',
+      'Check that you have contacts in the Resend Segment',
     ],
   },
 
-  AUDIENCE_ID_MISSING: {
-    title: 'Audience ID Required',
-    description: 'To sync contacts from Resend, you need to configure your Audience ID in Settings.',
+  SEGMENT_ID_MISSING: {
+    title: 'Segment ID Required',
+    description: 'To sync contacts from Resend, you need to configure your Segment ID in Settings. Find it at resend.com/audience → Segments → Your Segment.',
     severity: 'warning',
     action: {
       text: 'Go to Settings',

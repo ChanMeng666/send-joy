@@ -144,7 +144,13 @@ To send emails from your own domain (e.g., `hello@yourdomain.com`):
 | **Resend API Key** | Your API key from Step 2.1 | `re_AbCdEf123456...` |
 | **Sender Email** | Your verified sender address | `hello@yourdomain.com` |
 | **Sender Name** | Display name for recipients | `John Smith` |
-| **Audience ID** (optional) | For syncing contacts from Resend | `aud_dc18b68d...` |
+| **Segment ID** (optional) | For syncing contacts from Resend Segments | `dc18b68d-cd0a-4c17-baf5-8de8edbf50fa` |
+
+> **How to find your Segment ID:**
+> 1. Go to [resend.com/audience](https://resend.com/audience)
+> 2. Click the "Segments" tab
+> 3. Click on the segment you want to use (e.g., "General")
+> 4. Copy the ID from the URL (the part after `/segments/`) or from the "ID" field in the right panel
 
 3. Click **Save Settings**
 
@@ -240,12 +246,12 @@ bob@company.com,Bob,Johnson
 - Invalid emails are skipped
 - Existing emails are not duplicated
 
-### 3.6 Syncing with Resend Audience
+### 3.6 Syncing with Resend Segments
 
-If you have an Audience ID configured in Settings:
+If you have a Segment ID configured in Settings:
 
 1. Click the **Sync Resend** button
-2. The platform fetches contacts from your Resend Audience
+2. The platform fetches contacts from your Resend Segment
 3. New contacts are merged with your existing list
 4. A success message shows how many were imported
 
@@ -254,7 +260,7 @@ sequenceDiagram
     participant Platform
     participant Resend API
 
-    Platform->>Resend API: GET /audiences/{id}/contacts
+    Platform->>Resend API: GET /segments/{id}/contacts
     Resend API-->>Platform: Contact List
     Platform->>Platform: Merge with Local Storage
     Platform-->>User: Show Updated List
@@ -782,7 +788,7 @@ A: The CSV must have a header row with an "email" column. Columns for "firstName
 
 **Q: Can I export my contacts?**
 
-A: Currently, contacts are stored in browser localStorage. You can sync with Resend Audiences to back them up in your Resend account.
+A: Currently, contacts are stored in browser localStorage. You can sync with Resend Segments to back them up in your Resend account.
 
 **Q: How do I delete all contacts?**
 

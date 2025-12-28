@@ -39,19 +39,23 @@ The key looks something like: re_AbCdEf123456...`,
   },
 
   'audience-id': {
-    title: 'What is an Audience ID?',
-    simple: 'An Audience ID is used to sync contacts from your Resend account. This is optional - you can skip it if you prefer to add contacts manually.',
-    body: `If you already have a list of contacts stored in Resend (called an "Audience"), you can sync them to this platform automatically using the Audience ID.
+    title: 'What is a Segment ID?',
+    simple: 'A Segment ID is used to sync contacts from your Resend account. This is optional - you can skip it if you prefer to add contacts manually.',
+    body: `Resend uses "Segments" to organize your contacts (e.g., "General", "Newsletter Subscribers", etc.). If you already have contacts in Resend, you can sync them to this platform using a Segment ID.
 
-This saves you from having to re-enter all your contacts manually. The ID is a unique identifier that looks like: aud_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`,
+The Segment ID is a UUID that looks like: dc18b68d-cd0a-4c17-baf5-8de8edbf50fa
+
+There are two ways to find your Segment ID:`,
     steps: [
-      { text: 'Log in to your Resend dashboard', link: 'https://resend.com' },
-      { text: 'Click "Audiences" in the left sidebar menu' },
-      { text: 'Select the audience you want to sync, or create a new one' },
-      { text: 'Copy the Audience ID from the page URL or the audience details' },
-      { text: 'Paste it into the Audience ID field in Settings' },
+      { text: 'Go to the Resend Audience page', link: 'https://resend.com/audience' },
+      { text: 'Click "Segments" tab in the top menu' },
+      { text: 'Click on the segment you want to sync (e.g., "General")' },
+      { text: 'You will be redirected to the segment detail page', highlight: true },
+      { text: 'Method 1: Copy the ID from the URL (the part after /segments/)' },
+      { text: 'Method 2: Look for the "ID" field in the segment details panel on the right side' },
+      { text: 'Paste the Segment ID into the Audience ID field in Settings' },
     ],
-    tip: 'If you don\'t have contacts in Resend yet, you can skip this step and add contacts manually or import them from a CSV file in the Contacts page.',
+    tip: 'The Segment ID is visible in two places: (1) In the page URL like resend.com/audience/segments/YOUR-SEGMENT-ID, or (2) In the right-side panel under "Segment" section showing the ID field. If you don\'t have contacts in Resend yet, you can skip this step.',
     optional: true,
   },
 
@@ -112,14 +116,14 @@ Your CSV file should have at least an "email" column. You can also include "firs
   },
 
   'resend-sync': {
-    title: 'Syncing with Resend Audience',
+    title: 'Syncing with Resend Segments',
     simple: 'If you have contacts stored in your Resend account, you can sync them to this platform with one click.',
-    body: `The Resend sync feature pulls contacts from your Resend Audience and adds them to this platform. This is useful if you already manage your contact list in Resend.
+    body: `The Resend sync feature pulls contacts from your Resend Segment and adds them to this platform. This is useful if you already manage your contact list in Resend.
 
 To use this feature, you need to:
 1. Have an API key configured in Settings
-2. Have an Audience ID configured in Settings
-3. Have contacts in that Resend Audience`,
+2. Have a Segment ID configured in the "Audience ID" field in Settings
+3. Have contacts in that Resend Segment`,
   },
 }
 

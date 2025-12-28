@@ -315,11 +315,11 @@ Send an email via Resend.
 
 ### GET `/api/contacts`
 
-List contacts from Resend Audience.
+List contacts from Resend Segments.
 
 ```typescript
 // Query params
-?apiKey=re_xxx&audienceId=aud_xxx
+?apiKey=re_xxx&audienceId=dc18b68d-cd0a-4c17-baf5-8de8edbf50fa
 
 // Response
 {

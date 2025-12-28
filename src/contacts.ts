@@ -4,8 +4,8 @@ import * as readline from 'readline';
 
 const resend = new Resend(config.resendApiKey);
 
-// Use existing Resend Audience ID from config
-const AUDIENCE_ID = config.audienceId;
+// Use Resend Segment ID from config
+const SEGMENT_ID = config.audienceId;
 
 interface Contact {
   email: string;
@@ -13,16 +13,16 @@ interface Contact {
   lastName?: string;
 }
 
-// Get audience ID (using existing one from config)
-export function getAudienceId(): string {
-  return AUDIENCE_ID;
+// Get segment ID (using existing one from config)
+export function getSegmentId(): string {
+  return SEGMENT_ID;
 }
 
-// Add a single contact to the existing audience
+// Add a single contact to the segment
 export async function addContact(contact: Contact): Promise<void> {
   try {
     const { data, error } = await resend.contacts.create({
-      audienceId: AUDIENCE_ID,
+      audienceId: SEGMENT_ID,
       email: contact.email,
       firstName: contact.firstName || '',
       lastName: contact.lastName || '',
@@ -40,11 +40,11 @@ export async function addContact(contact: Contact): Promise<void> {
   }
 }
 
-// List all contacts from the existing audience
+// List all contacts from the segment
 export async function listContacts(): Promise<Contact[]> {
   try {
     const { data, error } = await resend.contacts.list({
-      audienceId: AUDIENCE_ID,
+      audienceId: SEGMENT_ID,
     });
 
     if (error) {
@@ -54,12 +54,12 @@ export async function listContacts(): Promise<Contact[]> {
 
     const contacts = data?.data || [];
 
-    console.log('\n📋 Contact List (Audience: ' + AUDIENCE_ID + ')');
+    console.log('\n📋 Contact List (Segment: ' + SEGMENT_ID + ')');
     console.log('─'.repeat(60));
 
     if (contacts.length === 0) {
       console.log('No contacts found.');
-      console.log('Add contacts at: https://resend.com/audiences/' + AUDIENCE_ID);
+      console.log('Add contacts at: https://resend.com/audience/segments/' + SEGMENT_ID);
       console.log('Or use: npm run contacts:add');
     } else {
       contacts.forEach((c: { email: string; first_name?: string; last_name?: string }, i: number) => {
@@ -86,7 +86,7 @@ export async function listContacts(): Promise<Contact[]> {
 export async function removeContact(email: string): Promise<void> {
   try {
     await resend.contacts.remove({
-      audienceId: AUDIENCE_ID,
+      audienceId: SEGMENT_ID,
       email,
     });
     console.log(`✅ Removed contact: ${email}`);
@@ -148,11 +148,11 @@ async function main() {
       console.log(`
 🎄 Christmas Email - Contact Manager
 
-Using Resend Audience: ${AUDIENCE_ID}
-Manage contacts at: https://resend.com/audiences/${AUDIENCE_ID}
+Using Resend Segment: ${SEGMENT_ID}
+Manage contacts at: https://resend.com/audience/segments/${SEGMENT_ID}
 
 Commands:
-  npm run contacts:list      List all contacts in your audience
+  npm run contacts:list      List all contacts in your segment
   npm run contacts:add       Add a contact interactively
 
 Note: You can also manage contacts directly in the Resend dashboard.

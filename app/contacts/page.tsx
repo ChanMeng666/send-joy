@@ -106,19 +106,19 @@ export default function ContactsPage() {
     }
   }
 
-  // Sync with Resend Audience
+  // Sync with Resend Segments
   const handleSyncResend = async () => {
     const settingsStr = localStorage.getItem(SETTINGS_KEY)
     if (!settingsStr) {
       setSyncStatus('error')
-      setSyncMessage('Please configure API Key and Audience ID in Settings first')
+      setSyncMessage('Please configure API Key and Segment ID in Settings first')
       return
     }
 
     const settings = JSON.parse(settingsStr)
     if (!settings.apiKey || !settings.audienceId) {
       setSyncStatus('error')
-      setSyncMessage('Please configure API Key and Audience ID in Settings first')
+      setSyncMessage('Please configure API Key and Segment ID in Settings first')
       return
     }
 

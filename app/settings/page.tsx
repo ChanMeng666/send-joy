@@ -133,7 +133,7 @@ export default function SettingsPage() {
 
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Label htmlFor="audienceId">Audience ID (Optional)</Label>
+                <Label htmlFor="audienceId">Segment ID (Optional)</Label>
                 <HelpButton topic="audience-id" />
               </div>
               <Input
@@ -144,7 +144,16 @@ export default function SettingsPage() {
                 className="neo-border"
               />
               <p className="text-xs text-gray-500">
-                For syncing contacts with Resend Audience
+                For syncing contacts with Resend Segments. Find it at{' '}
+                <a
+                  href="https://resend.com/audience"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neo-red underline hover:no-underline"
+                >
+                  resend.com/audience
+                </a>
+                {' → Segments → Your Segment → ID'}
               </p>
             </div>
           </CardContent>

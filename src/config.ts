@@ -8,7 +8,7 @@ export const config = {
   },
   linkedin: 'https://www.linkedin.com/in/chanmeng666/',
 
-  // Your existing Resend Audience ID (from https://resend.com/audiences)
+  // Your Resend Segment ID (from https://resend.com/audience → Segments → Your Segment → ID)
   audienceId: 'dc18b68d-cd0a-4c17-baf5-8de8edbf50fa',
 
   // Neobrutalism Christmas color palette
