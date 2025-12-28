@@ -348,19 +348,7 @@ export default function TemplateEditorPage() {
 
   // Load template data
   useEffect(() => {
-    // Check if it's a preset template
-    if (presetTemplateData[templateId]) {
-      const preset = presetTemplateData[templateId]
-      setTemplateName(preset.name)
-      setTemplateSubject(preset.subject)
-      setBlocks(preset.blocks)
-      setTheme(preset.theme)
-      setHistory([preset.blocks])
-      setHistoryIndex(0)
-      return
-    }
-
-    // Load from localStorage for custom templates
+    // First, try to load from localStorage (saved user modifications)
     const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
     if (saved) {
       try {
@@ -378,10 +366,22 @@ export default function TemplateEditorPage() {
           if (template.syncedAt) setSyncedAt(template.syncedAt)
           if (template.isPublished) setIsPublished(template.isPublished)
           if (template.resendTemplateId && template.syncedAt) setSyncStatus('synced')
+          return // Found saved template, stop here
         }
       } catch (e) {
-        console.error('Failed to load template:', e)
+        console.error('Failed to load template from localStorage:', e)
       }
+    }
+
+    // If no saved version found, check if it's a preset template
+    if (presetTemplateData[templateId]) {
+      const preset = presetTemplateData[templateId]
+      setTemplateName(preset.name)
+      setTemplateSubject(preset.subject)
+      setBlocks(preset.blocks)
+      setTheme(preset.theme)
+      setHistory([preset.blocks])
+      setHistoryIndex(0)
     }
   }, [templateId])
 
