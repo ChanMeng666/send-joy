@@ -124,8 +124,28 @@ export function ApiKeySetupGuide() {
             <Step
               number={4}
               title="Create a New API Key"
-              description="Click the 'Create API Key' button. Give your key a name like 'Email Platform' and select 'Sending access' for permissions."
+              description="Click the 'Create API Key' button. Give your key a name like 'Email Platform'."
+              highlight={true}
             />
+
+            {/* Important Permission Notice */}
+            <div className="flex items-start gap-3 p-4 bg-red-50 neo-border border-red-400 ml-12">
+              <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-bold text-sm text-red-800 mb-1">
+                  Important: Select "Full access" Permission
+                </h4>
+                <p className="text-sm text-red-700">
+                  When creating your API key, you must select <strong>"Full access"</strong> permission,
+                  NOT "Sending access". The "Sending access" option only allows sending emails,
+                  but features like <strong>Sync Contacts</strong> require full API access to work properly.
+                </p>
+                <p className="text-sm text-red-700 mt-2">
+                  If you see the error <em>"This API key is restricted to only send emails"</em>,
+                  please delete your current API key and create a new one with "Full access" permission.
+                </p>
+              </div>
+            </div>
 
             <Step
               number={5}

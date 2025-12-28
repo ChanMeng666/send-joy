@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Save, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react'
+import { Save, Eye, EyeOff, CheckCircle, AlertCircle, ShieldCheck, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -237,6 +237,57 @@ export default function SettingsPage() {
             </div>
           )}
         </div>
+
+        {/* Privacy & Security Notice */}
+        <Card className="neo-border bg-green-50 border-green-400">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-green-800">
+              <ShieldCheck className="w-5 h-5" />
+              Privacy & Security
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-start gap-3">
+              <Lock className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <h4 className="font-semibold text-sm text-green-800">Your Data Stays on Your Device</h4>
+                <p className="text-sm text-green-700">
+                  All your settings, API keys, and contact information are stored exclusively in your
+                  browser&apos;s local storage. This data never leaves your device and is never transmitted
+                  to our servers.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Lock className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <h4 className="font-semibold text-sm text-green-800">Direct Communication with Resend</h4>
+                <p className="text-sm text-green-700">
+                  When you send emails or sync contacts, your browser communicates directly with the
+                  Resend API using your API key. We do not intercept, store, or have access to your
+                  API key or any data you process.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Lock className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
+              <div>
+                <h4 className="font-semibold text-sm text-green-800">Open Source & Transparent</h4>
+                <p className="text-sm text-green-700">
+                  This project is open source. You can review the code to verify our privacy claims at{' '}
+                  <a
+                    href="https://github.com/ChanMeng666/christmas-greeting-email"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:no-underline font-medium"
+                  >
+                    GitHub
+                  </a>.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
