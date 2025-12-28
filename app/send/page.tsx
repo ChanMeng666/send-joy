@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -38,6 +38,22 @@ const PRESET_TEMPLATE_IDS = [
   'product-launch',
   'newsletter',
 ]
+
+interface ResendCloudTemplate {
+  id: string
+  name: string
+  created_at: string
+}
+
+interface TemplateItem {
+  id: string
+  name: string
+  emoji: string
+  isCustom?: boolean
+  isResendCloud?: boolean
+  resendTemplateId?: string
+  syncedAt?: string
+}
 
 interface Contact {
   id: string
@@ -236,9 +252,14 @@ export default function SendPage() {
   const [selectedContacts, setSelectedContacts] = useState<string[]>([])
   const [subject, setSubject] = useState('')
   const [contacts, setContacts] = useState<Contact[]>([])
-  const [templates, setTemplates] = useState<{ id: string; name: string; emoji: string; isCustom?: boolean; resendTemplateId?: string; syncedAt?: string }[]>([])
+  const [localTemplates, setLocalTemplates] = useState<TemplateItem[]>([])
+  const [resendCloudTemplates, setResendCloudTemplates] = useState<TemplateItem[]>([])
+  const [loadingResend, setLoadingResend] = useState(false)
 
-  // Load contacts and templates from localStorage
+  // Combine all templates
+  const templates = [...localTemplates, ...resendCloudTemplates]
+
+  // Load contacts and local templates from localStorage
   useEffect(() => {
     // Load contacts
     const savedContacts = localStorage.getItem(CONTACTS_STORAGE_KEY)
@@ -256,7 +277,7 @@ export default function SendPage() {
       savedTemplates ? JSON.parse(savedTemplates) : {}
 
     // Preset templates with sync info from localStorage
-    const presetList: { id: string; name: string; emoji: string; isCustom?: boolean; resendTemplateId?: string; syncedAt?: string }[] = [
+    const presetList: TemplateItem[] = [
       { id: 'christmas-classic', name: 'Classic Christmas', emoji: '🎄' },
       { id: 'new-year-2025', name: 'New Year 2025', emoji: '🎆' },
       { id: 'chinese-new-year', name: 'Chinese New Year', emoji: '🧧' },
@@ -276,7 +297,7 @@ export default function SendPage() {
     })
 
     // Add truly custom templates (non-preset IDs)
-    const customList = Object.entries(savedData)
+    const customList: TemplateItem[] = Object.entries(savedData)
       .filter(([id]) => !PRESET_TEMPLATE_IDS.includes(id))
       .map(([id, data]) => ({
         id,
@@ -287,8 +308,53 @@ export default function SendPage() {
         syncedAt: data.syncedAt,
       }))
 
-    setTemplates([...presetList, ...customList])
+    setLocalTemplates([...presetList, ...customList])
   }, [])
+
+  // Load Resend cloud templates
+  const fetchResendTemplates = useCallback(async () => {
+    const settings = localStorage.getItem(SETTINGS_STORAGE_KEY)
+    if (!settings) return
+
+    try {
+      const parsed = JSON.parse(settings)
+      if (!parsed.resendApiKey) return
+
+      setLoadingResend(true)
+      const response = await fetch(`/api/resend-templates?apiKey=${encodeURIComponent(parsed.resendApiKey)}`)
+      const data = await response.json()
+
+      if (data.success && data.templates) {
+        // Get all local resendTemplateIds to avoid duplicates
+        const localResendIds = new Set(
+          localTemplates
+            .filter(t => t.resendTemplateId)
+            .map(t => t.resendTemplateId)
+        )
+
+        // Convert Resend cloud templates to our format, excluding duplicates
+        const cloudTemplates: TemplateItem[] = (data.templates as ResendCloudTemplate[])
+          .filter(t => !localResendIds.has(t.id))
+          .map(t => ({
+            id: `resend-${t.id}`,
+            name: t.name,
+            emoji: '☁️',
+            isResendCloud: true,
+            resendTemplateId: t.id,
+          }))
+
+        setResendCloudTemplates(cloudTemplates)
+      }
+    } catch (e) {
+      console.error('Failed to fetch Resend templates:', e)
+    } finally {
+      setLoadingResend(false)
+    }
+  }, [localTemplates])
+
+  useEffect(() => {
+    fetchResendTemplates()
+  }, [fetchResendTemplates])
 
   const canProceed = () => {
     switch (currentStep) {
@@ -365,6 +431,7 @@ export default function SendPage() {
             selected={selectedTemplate}
             onSelect={setSelectedTemplate}
             templates={templates}
+            loading={loadingResend}
           />
         )}
         {currentStep === 2 && (
@@ -427,15 +494,25 @@ export default function SendPage() {
 function StepTemplate({
   selected,
   onSelect,
-  templates
+  templates,
+  loading = false
 }: {
   selected: string | null
   onSelect: (id: string) => void
-  templates: { id: string; name: string; emoji: string; isCustom?: boolean; resendTemplateId?: string; syncedAt?: string }[]
+  templates: TemplateItem[]
+  loading?: boolean
 }) {
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Select a Template</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold">Select a Template</h2>
+        {loading && (
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Loading cloud templates...
+          </div>
+        )}
+      </div>
       <div className="grid grid-cols-3 gap-4">
         {templates.map(template => (
           <button
@@ -449,15 +526,21 @@ function StepTemplate({
           >
             {/* Badges */}
             <div className="absolute top-2 left-2 flex gap-1">
+              {/* Cloud badge - for Resend cloud templates */}
+              {template.isResendCloud && (
+                <div className="bg-blue-500 text-white text-xs px-1.5 py-0.5 font-bold uppercase flex items-center gap-1">
+                  <Cloud className="w-3 h-3" />
+                </div>
+              )}
               {/* Custom badge */}
-              {template.isCustom && (
+              {template.isCustom && !template.isResendCloud && (
                 <div className="bg-black text-white text-xs px-1.5 py-0.5 font-bold uppercase">
                   Custom
                 </div>
               )}
             </div>
-            {/* Sync badge */}
-            {template.resendTemplateId && (
+            {/* Sync badge - for local templates synced to Resend */}
+            {template.resendTemplateId && !template.isResendCloud && (
               <div
                 className="absolute top-2 right-2 bg-green-500 text-white text-xs px-1.5 py-0.5 flex items-center gap-1 rounded-sm"
                 title={`Synced: ${template.syncedAt ? new Date(template.syncedAt).toLocaleString() : 'Unknown'}`}

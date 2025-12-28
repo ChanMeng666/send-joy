@@ -1,13 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, Gift, Megaphone, Newspaper, Edit, Copy, Trash2, Check, Cloud } from 'lucide-react'
+import { Plus, Gift, Megaphone, Newspaper, Edit, Copy, Trash2, Check, Cloud, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 const TEMPLATES_STORAGE_KEY = 'email-platform-templates'
+const SETTINGS_STORAGE_KEY = 'email-platform-settings'
 
 // Preset template IDs for reference
 const PRESET_TEMPLATE_IDS = [
@@ -27,11 +28,18 @@ interface TemplateWithSync {
   thumbnail: string
   color: string
   isPreset: boolean
+  isResendCloud?: boolean // Template from Resend cloud (not local)
   createdAt?: string
   // Resend sync fields
   resendTemplateId?: string
   syncedAt?: string
   isPublished?: boolean
+}
+
+interface ResendCloudTemplate {
+  id: string
+  name: string
+  created_at: string
 }
 
 // Preset templates data
@@ -106,11 +114,13 @@ const typeLabels = {
 
 export default function TemplatesPage() {
   const router = useRouter()
-  const [activeFilter, setActiveFilter] = useState<'all' | 'holiday' | 'marketing' | 'newsletter' | 'custom'>('all')
-  const [allTemplates, setAllTemplates] = useState<TemplateWithSync[]>([])
+  const [activeFilter, setActiveFilter] = useState<'all' | 'holiday' | 'marketing' | 'newsletter' | 'custom' | 'resend'>('all')
+  const [localTemplates, setLocalTemplates] = useState<TemplateWithSync[]>([])
+  const [resendCloudTemplates, setResendCloudTemplates] = useState<TemplateWithSync[]>([])
+  const [loadingResend, setLoadingResend] = useState(false)
   const [copyMessage, setCopyMessage] = useState<string | null>(null)
 
-  // Load templates from localStorage and merge with presets
+  // Load local templates from localStorage and merge with presets
   useEffect(() => {
     const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
     const savedData: Record<string, {
@@ -136,7 +146,7 @@ export default function TemplatesPage() {
       return preset
     })
 
-    // Load truly custom templates (non-preset IDs)
+    // Load truly custom templates (non-preset IDs, excluding Resend cloud template IDs)
     const customTemplates: TemplateWithSync[] = Object.entries(savedData)
       .filter(([id]) => !PRESET_TEMPLATE_IDS.includes(id))
       .map(([id, data]) => ({
@@ -153,15 +163,70 @@ export default function TemplatesPage() {
         isPublished: data.isPublished,
       }))
 
-    setAllTemplates([...presetsWithSyncInfo, ...customTemplates])
+    setLocalTemplates([...presetsWithSyncInfo, ...customTemplates])
   }, [])
+
+  // Load Resend cloud templates
+  const fetchResendTemplates = useCallback(async () => {
+    const settings = localStorage.getItem(SETTINGS_STORAGE_KEY)
+    if (!settings) return
+
+    try {
+      const parsed = JSON.parse(settings)
+      if (!parsed.resendApiKey) return
+
+      setLoadingResend(true)
+      const response = await fetch(`/api/resend-templates?apiKey=${encodeURIComponent(parsed.resendApiKey)}`)
+      const data = await response.json()
+
+      if (data.success && data.templates) {
+        // Get all local resendTemplateIds to avoid duplicates
+        const localResendIds = new Set(
+          localTemplates
+            .filter(t => t.resendTemplateId)
+            .map(t => t.resendTemplateId)
+        )
+
+        // Convert Resend cloud templates to our format, excluding duplicates
+        const cloudTemplates: TemplateWithSync[] = (data.templates as ResendCloudTemplate[])
+          .filter(t => !localResendIds.has(t.id))
+          .map(t => ({
+            id: `resend-${t.id}`,
+            name: t.name,
+            type: 'holiday' as const, // Default type for cloud templates
+            description: 'Template from Resend cloud',
+            thumbnail: '☁️',
+            color: 'bg-blue-500',
+            isPreset: false,
+            isResendCloud: true,
+            createdAt: t.created_at,
+            resendTemplateId: t.id,
+          }))
+
+        setResendCloudTemplates(cloudTemplates)
+      }
+    } catch (e) {
+      console.error('Failed to fetch Resend templates:', e)
+    } finally {
+      setLoadingResend(false)
+    }
+  }, [localTemplates])
+
+  useEffect(() => {
+    fetchResendTemplates()
+  }, [fetchResendTemplates])
+
+  // Combine all templates
+  const allTemplates = [...localTemplates, ...resendCloudTemplates]
 
   // Filter templates
   const filteredTemplates = activeFilter === 'all'
     ? allTemplates
     : activeFilter === 'custom'
-      ? allTemplates.filter(t => 'isPreset' in t && !t.isPreset)
-      : allTemplates.filter(t => t.type === activeFilter)
+      ? allTemplates.filter(t => !t.isPreset && !t.isResendCloud)
+      : activeFilter === 'resend'
+        ? allTemplates.filter(t => t.isResendCloud || t.resendTemplateId)
+        : allTemplates.filter(t => t.type === activeFilter)
 
   // Create new template
   const handleCreateTemplate = () => {
@@ -257,7 +322,7 @@ export default function TemplatesPage() {
     localStorage.setItem(TEMPLATES_STORAGE_KEY, JSON.stringify(templates))
 
     // Update UI - add new custom template to the list
-    setAllTemplates(prev => [...prev, {
+    setLocalTemplates(prev => [...prev, {
       id: newId,
       name: `${template.name} (Copy)`,
       type: template.type as 'holiday' | 'marketing' | 'newsletter',
@@ -282,13 +347,14 @@ export default function TemplatesPage() {
     delete templates[id]
     localStorage.setItem(TEMPLATES_STORAGE_KEY, JSON.stringify(templates))
 
-    setAllTemplates(prev => prev.filter(t => t.id !== id))
+    setLocalTemplates(prev => prev.filter(t => t.id !== id))
   }
 
   // Get count for each filter type
-  const getFilterCount = (type: 'all' | 'holiday' | 'marketing' | 'newsletter' | 'custom') => {
+  const getFilterCount = (type: 'all' | 'holiday' | 'marketing' | 'newsletter' | 'custom' | 'resend') => {
     if (type === 'all') return allTemplates.length
-    if (type === 'custom') return allTemplates.filter(t => !t.isPreset).length
+    if (type === 'custom') return allTemplates.filter(t => !t.isPreset && !t.isResendCloud).length
+    if (type === 'resend') return allTemplates.filter(t => t.isResendCloud || t.resendTemplateId).length
     return allTemplates.filter(t => t.type === type).length
   }
 
@@ -361,6 +427,13 @@ export default function TemplatesPage() {
           active={activeFilter === 'custom'}
           onClick={() => setActiveFilter('custom')}
         />
+        <FilterTab
+          label="Resend"
+          count={getFilterCount('resend')}
+          active={activeFilter === 'resend'}
+          onClick={() => setActiveFilter('resend')}
+          loading={loadingResend}
+        />
       </div>
 
       {/* Template Grid */}
@@ -388,28 +461,34 @@ function FilterTab({
   label,
   count,
   active = false,
-  onClick
+  onClick,
+  loading = false
 }: {
   label: string
   count: number
   active?: boolean
   onClick: () => void
+  loading?: boolean
 }) {
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 text-sm font-bold uppercase tracking-wide border-2 transition-all ${
+      className={`px-4 py-2 text-sm font-bold uppercase tracking-wide border-2 transition-all flex items-center gap-1 ${
         active
           ? 'bg-black text-white border-black'
           : 'bg-white text-black border-black hover:bg-gray-100'
       }`}
     >
       {label}
-      <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
-        active ? 'bg-white text-black' : 'bg-gray-200 text-gray-700'
-      }`}>
-        {count}
-      </span>
+      {loading ? (
+        <Loader2 className="w-3 h-3 animate-spin ml-1" />
+      ) : (
+        <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+          active ? 'bg-white text-black' : 'bg-gray-200 text-gray-700'
+        }`}>
+          {count}
+        </span>
+      )}
     </button>
   )
 }
@@ -424,8 +503,9 @@ function TemplateCard({
   onDelete?: () => void
 }) {
   const TypeIcon = typeIcons[template.type as keyof typeof typeIcons]
-  const isCustom = !template.isPreset
-  const isSynced = !!template.resendTemplateId
+  const isCustom = !template.isPreset && !template.isResendCloud
+  const isSynced = !!template.resendTemplateId && !template.isResendCloud
+  const isCloud = !!template.isResendCloud
 
   return (
     <Card className="neo-border neo-shadow overflow-hidden group">
@@ -435,13 +515,20 @@ function TemplateCard({
 
         {/* Badges */}
         <div className="absolute top-2 left-2 flex gap-1">
+          {/* Cloud badge - for Resend cloud templates */}
+          {isCloud && (
+            <div className="bg-blue-500 text-white text-xs px-2 py-1 font-bold uppercase flex items-center gap-1">
+              <Cloud className="w-3 h-3" />
+              Resend
+            </div>
+          )}
           {/* Custom badge */}
           {isCustom && (
             <div className="bg-black text-white text-xs px-2 py-1 font-bold uppercase">
               Custom
             </div>
           )}
-          {/* Synced badge - now works for both preset and custom templates */}
+          {/* Synced badge - for local templates synced to Resend */}
           {isSynced && (
             <div
               className="bg-green-500 text-white text-xs px-2 py-1 font-bold uppercase flex items-center gap-1"
