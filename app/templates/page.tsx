@@ -96,7 +96,7 @@ const typeLabels = {
 
 export default function TemplatesPage() {
   const router = useRouter()
-  const [activeFilter, setActiveFilter] = useState<'all' | 'holiday' | 'marketing' | 'newsletter'>('all')
+  const [activeFilter, setActiveFilter] = useState<'all' | 'holiday' | 'marketing' | 'newsletter' | 'custom'>('all')
   const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([])
   const [copyMessage, setCopyMessage] = useState<string | null>(null)
 
@@ -144,7 +144,9 @@ export default function TemplatesPage() {
   // Filter templates
   const filteredTemplates = activeFilter === 'all'
     ? allTemplates
-    : allTemplates.filter(t => t.type === activeFilter)
+    : activeFilter === 'custom'
+      ? allTemplates.filter(t => 'isPreset' in t && !t.isPreset)
+      : allTemplates.filter(t => t.type === activeFilter)
 
   // Create new template
   const handleCreateTemplate = () => {
@@ -268,8 +270,9 @@ export default function TemplatesPage() {
     setCustomTemplates(customTemplates.filter(t => t.id !== id))
   }
 
-  const getFilterCount = (type: 'all' | 'holiday' | 'marketing' | 'newsletter') => {
+  const getFilterCount = (type: 'all' | 'holiday' | 'marketing' | 'newsletter' | 'custom') => {
     if (type === 'all') return allTemplates.length
+    if (type === 'custom') return customTemplates.length
     return allTemplates.filter(t => t.type === type).length
   }
 
@@ -311,7 +314,7 @@ export default function TemplatesPage() {
       )}
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 mb-8">
+      <div className="flex gap-2 mb-8 flex-wrap">
         <FilterTab
           label="All"
           count={getFilterCount('all')}
@@ -335,6 +338,12 @@ export default function TemplatesPage() {
           count={getFilterCount('newsletter')}
           active={activeFilter === 'newsletter'}
           onClick={() => setActiveFilter('newsletter')}
+        />
+        <FilterTab
+          label="Custom"
+          count={getFilterCount('custom')}
+          active={activeFilter === 'custom'}
+          onClick={() => setActiveFilter('custom')}
         />
       </div>
 

@@ -612,26 +612,30 @@ function StepPreview({
     const loadPreview = async () => {
       setLoading(true)
 
-      // Get template data
+      // Get template data - prioritize localStorage (user modifications) over presets
       let blocks: Block[] = []
       let theme: Theme | null = null
+      let foundInStorage = false
 
-      if (presetTemplateData[templateId]) {
+      // First, try to load from localStorage (saved user modifications)
+      const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
+      if (saved) {
+        try {
+          const templates = JSON.parse(saved)
+          if (templates[templateId]) {
+            blocks = templates[templateId].blocks || []
+            theme = templates[templateId].theme
+            foundInStorage = true
+          }
+        } catch (e) {
+          console.error('Failed to load template from localStorage:', e)
+        }
+      }
+
+      // If not found in localStorage, use preset data
+      if (!foundInStorage && presetTemplateData[templateId]) {
         blocks = presetTemplateData[templateId].blocks
         theme = presetTemplateData[templateId].theme
-      } else {
-        const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
-        if (saved) {
-          try {
-            const templates = JSON.parse(saved)
-            if (templates[templateId]) {
-              blocks = templates[templateId].blocks || []
-              theme = templates[templateId].theme
-            }
-          } catch (e) {
-            console.error('Failed to load template:', e)
-          }
-        }
       }
 
       try {
@@ -742,21 +746,24 @@ function StepSend({
     }
 
     // Load template data to check for Resend sync status
+    // Prioritize localStorage (user modifications) over presets
     if (templateId) {
-      if (presetTemplateData[templateId]) {
-        setTemplateData(presetTemplateData[templateId])
-      } else {
-        const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
-        if (saved) {
-          try {
-            const templates = JSON.parse(saved)
-            if (templates[templateId]) {
-              setTemplateData(templates[templateId])
-            }
-          } catch (e) {
-            console.error('Failed to load template:', e)
+      let foundInStorage = false
+      const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
+      if (saved) {
+        try {
+          const templates = JSON.parse(saved)
+          if (templates[templateId]) {
+            setTemplateData(templates[templateId])
+            foundInStorage = true
           }
+        } catch (e) {
+          console.error('Failed to load template:', e)
         }
+      }
+
+      if (!foundInStorage && presetTemplateData[templateId]) {
+        setTemplateData(presetTemplateData[templateId])
       }
     }
   }, [templateId])
@@ -776,26 +783,30 @@ function StepSend({
     setResults([])
     setProgress(0)
 
-    // Get template data
+    // Get template data - prioritize localStorage (user modifications) over presets
     let blocks: Block[] = []
     let theme: Theme | null = null
+    let foundInStorage = false
 
-    if (presetTemplateData[templateId!]) {
+    // First, try to load from localStorage (saved user modifications)
+    const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
+    if (saved) {
+      try {
+        const templates = JSON.parse(saved)
+        if (templates[templateId!]) {
+          blocks = templates[templateId!].blocks || []
+          theme = templates[templateId!].theme
+          foundInStorage = true
+        }
+      } catch (e) {
+        console.error('Failed to load template from localStorage:', e)
+      }
+    }
+
+    // If not found in localStorage, use preset data
+    if (!foundInStorage && presetTemplateData[templateId!]) {
       blocks = presetTemplateData[templateId!].blocks
       theme = presetTemplateData[templateId!].theme
-    } else {
-      const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
-      if (saved) {
-        try {
-          const templates = JSON.parse(saved)
-          if (templates[templateId!]) {
-            blocks = templates[templateId!].blocks || []
-            theme = templates[templateId!].theme
-          }
-        } catch (e) {
-          console.error('Failed to load template:', e)
-        }
-      }
     }
 
     const sendResults: { email: string; success: boolean; error?: string }[] = []
