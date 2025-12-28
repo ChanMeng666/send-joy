@@ -1,6 +1,6 @@
-# Email Template Platform - User Tutorial
+# SendJoy - Email Template Platform User Tutorial
 
-This comprehensive guide will walk you through every feature of the Email Template Platform, from initial setup to sending your first email campaign.
+This comprehensive guide will walk you through every feature of SendJoy, from initial setup to sending your first email campaign.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ This comprehensive guide will walk you through every feature of the Email Templa
 
 ### 1.1 Accessing the Platform
 
-You can access the Email Template Platform in two ways:
+You can access SendJoy in two ways:
 
 **Option A: Use the Live Version (Recommended)**
 
@@ -40,9 +40,27 @@ npm run dev
 
 Then open `http://localhost:3000` in your browser.
 
-### 1.2 Platform Overview
+### 1.2 First-Time User Experience
 
-When you first open the platform, you'll see the Dashboard:
+When you first visit SendJoy, you'll see a Welcome Modal that guides you through the platform:
+
+```mermaid
+flowchart LR
+    WELCOME[Welcome Modal] --> SKIP[Skip Tour]
+    WELCOME --> START[Start Tour]
+    START --> PROGRESS[Setup Progress]
+    PROGRESS --> SETTINGS[Configure Settings]
+    SETTINGS --> CONTACTS[Add Contacts]
+    CONTACTS --> TEMPLATES[Create Template]
+    TEMPLATES --> SEND[Send First Email]
+
+    style WELCOME fill:#DC2626,color:#fff
+    style SEND fill:#16A34A,color:#fff
+```
+
+### 1.3 Platform Overview
+
+The Dashboard provides quick access to all main features:
 
 ```mermaid
 graph TD
@@ -61,6 +79,12 @@ graph TD
         QUICK --> T4[Settings]
     end
 
+    subgraph "Additional Features"
+        PROGRESS[Setup Progress Tracker]
+        HELP[Help Button]
+        BADGE[Developer Badge]
+    end
+
     style SIDEBAR fill:#1a1a2e,color:#fff
     style HOME fill:#DC2626,color:#fff
     style TEMPLATES fill:#16A34A,color:#fff
@@ -70,11 +94,16 @@ graph TD
 ```
 
 **Navigation Sidebar** (left side):
-- **Home** - Dashboard overview with quick actions
+- **Home** - Dashboard overview with quick actions and setup progress
 - **Templates** - Browse, create, and edit email templates
 - **Contacts** - Manage your recipients
 - **Send** - 5-step email sending wizard
 - **Settings** - Configure API keys and sender info
+
+**Additional Features:**
+- **Help Button** - Context-aware help modal with documentation
+- **Setup Progress** - Visual checklist tracking your configuration status
+- **Developer Badge** - Information about the platform author
 
 ---
 
@@ -108,7 +137,7 @@ flowchart LR
 4. **Navigate to API Keys**: Go to [resend.com/api-keys](https://resend.com/api-keys)
 5. **Create a New Key**:
    - Click "Create API Key"
-   - Give it a name (e.g., "Email Platform")
+   - Give it a name (e.g., "SendJoy Platform")
    - Select "Full access" for permissions
    - Click "Create"
 6. **Copy Your Key**: Your API key will look like `re_xxxxxxxxxx`
@@ -144,13 +173,12 @@ To send emails from your own domain (e.g., `hello@yourdomain.com`):
 | **Resend API Key** | Your API key from Step 2.1 | `re_AbCdEf123456...` |
 | **Sender Email** | Your verified sender address | `hello@yourdomain.com` |
 | **Sender Name** | Display name for recipients | `John Smith` |
-| **Segment ID** (optional) | For syncing contacts from Resend Segments | `dc18b68d-cd0a-4c17-baf5-8de8edbf50fa` |
+| **Audience ID** (optional) | For syncing contacts from Resend Audiences | `dc18b68d-cd0a-4c17-baf5-8de8edbf50fa` |
 
-> **How to find your Segment ID:**
-> 1. Go to [resend.com/audience](https://resend.com/audience)
-> 2. Click the "Segments" tab
-> 3. Click on the segment you want to use (e.g., "General")
-> 4. Copy the ID from the URL (the part after `/segments/`) or from the "ID" field in the right panel
+> **How to find your Audience ID:**
+> 1. Go to [resend.com/audiences](https://resend.com/audiences)
+> 2. Click on the audience you want to use
+> 3. Copy the ID from the URL or the details panel
 
 3. Click **Save Settings**
 
@@ -166,6 +194,18 @@ sequenceDiagram
     Settings Page->>LocalStorage: Store Settings
     Settings Page-->>User: Show Success Message
 ```
+
+### 2.4 Setup Progress Tracking
+
+The Dashboard shows your setup progress with a visual checklist:
+
+- **Configure API Key** - Add your Resend API key
+- **Set Sender Email** - Configure your sender address
+- **Add Contacts** - Add at least one recipient
+- **Create Template** - Customize or create a template
+- **Send First Email** - Successfully send your first email
+
+Each step shows a checkmark when completed, helping you track your configuration status.
 
 ---
 
@@ -246,12 +286,12 @@ bob@company.com,Bob,Johnson
 - Invalid emails are skipped
 - Existing emails are not duplicated
 
-### 3.6 Syncing with Resend Segments
+### 3.6 Syncing with Resend Audiences
 
-If you have a Segment ID configured in Settings:
+If you have an Audience ID configured in Settings:
 
-1. Click the **Sync Resend** button
-2. The platform fetches contacts from your Resend Segment
+1. Click the **Sync from Resend** button
+2. The platform fetches contacts from your Resend Audience
 3. New contacts are merged with your existing list
 4. A success message shows how many were imported
 
@@ -260,7 +300,7 @@ sequenceDiagram
     participant Platform
     participant Resend API
 
-    Platform->>Resend API: GET /segments/{id}/contacts
+    Platform->>Resend API: GET /audiences/{id}/contacts
     Resend API-->>Platform: Contact List
     Platform->>Platform: Merge with Local Storage
     Platform-->>User: Show Updated List
@@ -274,7 +314,7 @@ The Templates page displays all available email templates with filtering and man
 
 ### 4.1 Template Categories
 
-Templates are organized into three categories:
+Templates are organized into four categories:
 
 ```mermaid
 graph TB
@@ -293,12 +333,17 @@ graph TB
         WEEKLY[Weekly Newsletter]
     end
 
+    subgraph "Custom Templates"
+        USER[Your Templates]
+    end
+
     style XMAS fill:#DC2626,color:#fff
     style NY fill:#7C3AED,color:#fff
     style CNY fill:#EF4444,color:#fff
     style BDAY fill:#EC4899,color:#fff
     style LAUNCH fill:#F59E0B,color:#fff
     style WEEKLY fill:#16A34A,color:#fff
+    style USER fill:#3B82F6,color:#fff
 ```
 
 ### 4.2 Browsing Templates
@@ -309,6 +354,7 @@ graph TB
    - **Holiday** - Greeting cards and celebrations
    - **Marketing** - Promotional emails
    - **Newsletter** - Regular updates
+   - **Custom** - Your created/copied templates
 3. The count badge shows how many templates match each filter
 4. Hover over a template card to see action buttons
 
@@ -342,18 +388,27 @@ Only custom templates can be deleted (presets are permanent):
 3. Confirm the deletion
 4. The template is permanently removed
 
+### 4.6 Using Resend Cloud Templates
+
+SendJoy integrates with Resend's template system:
+
+1. Click **Resend Templates** tab in the Templates page
+2. View all templates stored in your Resend account
+3. Use them directly in the Send wizard
+4. Supports Resend's variable syntax: `{{{VARIABLE_NAME}}}`
+
 ---
 
 ## 5. Using the Visual Editor
 
-The Visual Editor is the heart of the platform, allowing you to customize email templates without any coding.
+The Visual Editor is the heart of the platform, allowing you to customize email templates with drag-and-drop functionality.
 
 ### 5.1 Editor Layout
 
 ```mermaid
 graph LR
     subgraph "Editor Interface"
-        LEFT[Block Palette<br/>Add & manage blocks]
+        LEFT[Block Palette<br/>Add & reorder blocks]
         CENTER[Canvas<br/>Visual preview]
         RIGHT[Properties Panel<br/>Edit selected item]
     end
@@ -370,7 +425,7 @@ The editor has three main panels:
 
 | Panel | Location | Purpose |
 |-------|----------|---------|
-| **Block Palette** | Left | Add new blocks and see block list |
+| **Block Palette** | Left | Add new blocks, drag to reorder |
 | **Canvas** | Center | Visual preview of your email |
 | **Properties Panel** | Right | Edit selected block or theme |
 
@@ -392,38 +447,48 @@ The toolbar at the top provides:
 
 ### 5.3 Available Blocks
 
-| Block | Icon | Description | Properties |
-|-------|------|-------------|------------|
-| **Header** | Type | Title and subtitle section | title, subtitle |
-| **Text** | Type | Paragraph or content | content |
-| **Image** | Image | Photo or graphic | src (URL), alt |
-| **Button** | Pointer | Call-to-action link | text, url |
-| **Wishes List** | List | Bulleted list with icons | title, items |
-| **Divider** | Line | Horizontal separator | (none) |
-| **Footer** | Signature | Sender signature | senderLabel, senderName |
+| Block | Description | Properties |
+|-------|-------------|------------|
+| **Header** | Title and subtitle section | title, subtitle, showIcons, icons |
+| **Text** | Paragraph or content | content, alignment, highlightBox |
+| **Image** | Photo or graphic | src (URL), alt, caption, borderStyle, shadowColor |
+| **Button** | Call-to-action link | text, url, style (primary/secondary/outline) |
+| **Wishes List** | Bulleted list with icons | title, items (icon + text) |
+| **Divider** | Horizontal separator | style (line/icons/spacer), height |
+| **Footer** | Sender signature | senderName, senderLabel, showLinkedIn, linkedInUrl, closingMessage |
 
-### 5.4 Adding a Block
+### 5.4 Drag-and-Drop Reordering
+
+SendJoy uses @dnd-kit for intuitive drag-and-drop:
+
+1. In the left panel, find the block you want to move
+2. Click and hold the drag handle (grip icon)
+3. Drag the block to its new position
+4. Release to drop
+5. The canvas updates immediately
+
+```mermaid
+flowchart LR
+    A[Click Drag Handle] --> B[Drag Block]
+    B --> C[See Drop Indicator]
+    C --> D[Release to Drop]
+    D --> E[Canvas Updates]
+
+    style A fill:#FEF3C7
+    style E fill:#D1FAE5
+```
+
+### 5.5 Adding a Block
 
 1. In the left panel, find the block type you want under "Add Blocks"
 2. Click the block row (or the + icon)
 3. The block is added to the bottom of your email
 4. The block is automatically selected for editing
 
-```mermaid
-flowchart LR
-    A[Choose Block Type] --> B[Click to Add]
-    B --> C[Block Appears in Canvas]
-    C --> D[Block Auto-Selected]
-    D --> E[Edit in Properties Panel]
-
-    style A fill:#FEF3C7
-    style E fill:#D1FAE5
-```
-
-### 5.5 Editing a Block
+### 5.6 Editing a Block
 
 1. Click on any block in the canvas
-2. The block will be highlighted with a red border
+2. The block will be highlighted with a colored border
 3. The Properties Panel (right) shows editing options
 4. Make your changes - they appear immediately in the canvas
 
@@ -433,58 +498,77 @@ flowchart LR
 |----------|-------------|
 | **Subtitle** | Small text above the title |
 | **Title** | Main heading text |
+| **Show Icons** | Toggle decorative icons |
 
-**Example: Editing a Wishes List Block**
+**Example: Editing a Footer Block**
 
 | Property | Description |
 |----------|-------------|
-| **Section Title** | Heading for the wishes section |
-| **Wish Items** | Each item has an icon + text |
-| **Add Wish** | Button to add new items |
-| **Delete** | Trash icon to remove items |
+| **Closing Message** | Farewell text (e.g., "Best wishes") |
+| **Sender Label** | Role or title (e.g., "From") |
+| **Sender Name** | Your name |
+| **Show LinkedIn** | Toggle LinkedIn link |
+| **LinkedIn URL** | Your LinkedIn profile URL |
 
-### 5.6 Managing Blocks
+### 5.7 Block Visibility
+
+Control which blocks appear in the final email:
+
+1. Click the **eye icon** on any block in the list
+2. Hidden blocks show a crossed-out eye
+3. Hidden blocks are not rendered in the final email
+4. Useful for preparing alternative content
+
+### 5.8 Managing Blocks
 
 In the left panel's "Blocks in Template" section:
 
 - **Click** a block to select it
+- **Drag** the handle to reorder
+- **Eye icon** toggles visibility
 - **Trash icon** removes the block
-- Blocks are listed in order from top to bottom
 
-### 5.7 Deleting a Block
+### 5.9 Deleting a Block
 
 1. Find the block in the left panel's block list
 2. Click the trash icon next to it
 3. The block is immediately removed
 4. Use **Undo** if you made a mistake
 
-### 5.8 Undo and Redo
+### 5.10 Undo and Redo
 
 The editor maintains a history of up to 50 changes:
 
-- **Undo** (or the button) - Go back one step
-- **Redo** (or the button) - Go forward one step
+- **Undo** button or keyboard shortcut - Go back one step
+- **Redo** button or keyboard shortcut - Go forward one step
 - History is preserved until you leave the page
 
-### 5.9 Customizing Theme
+### 5.11 Customizing Theme
 
 When no block is selected, the Properties Panel shows theme options:
 
 | Property | Description |
 |----------|-------------|
 | **Primary Color** | Headers, accents (default: red) |
+| **Primary Color Dark** | Dark variant for borders/shadows |
+| **Primary Color Light** | Light variant for backgrounds |
 | **Secondary Color** | Buttons, footers (default: green) |
+| **Secondary Color Dark** | Dark variant |
+| **Secondary Color Light** | Light variant |
 | **Accent Color** | Highlights (default: gold) |
+| **Accent Color Light** | Light variant |
 | **Background Color** | Email body background |
 | **Surface Color** | Content area background |
-| **Border Width** | Neobrutalism border thickness (1-10px) |
+| **Text Color** | Body text color |
+| **Border Color** | Neobrutalism borders |
+| **Border Width** | Border thickness (1-10px) |
 | **Shadow Offset** | Hard shadow distance (0-20px) |
 
 Each color has:
 - A **color picker** (click the square)
 - A **hex input** (type exact value)
 
-### 5.10 Using Variables
+### 5.12 Using Variables
 
 You can personalize emails using variables that get replaced when sending:
 
@@ -494,6 +578,11 @@ You can personalize emails using variables that get replaced when sending:
 | `{{senderName}}` | Your configured name | "Jane Smith" |
 | `{{currentYear}}` | Current year | "2025" |
 | `{{nextYear}}` | Next year | "2026" |
+
+**Syntax Support:**
+
+- **Local preview syntax**: `{{variableName}}` (camelCase)
+- **Resend template syntax**: `{{{VARIABLE_NAME}}}` (UPPER_SNAKE_CASE)
 
 **Example usage in text:**
 ```
@@ -505,7 +594,7 @@ Best regards,
 {{senderName}}
 ```
 
-### 5.11 Preview Modes
+### 5.13 Preview Modes
 
 **Canvas Preview:**
 - Use the Desktop/Mobile toggle in the toolbar
@@ -519,7 +608,7 @@ Best regards,
 4. Variables are replaced with sample values
 5. Click X or outside to close
 
-### 5.12 Saving Your Template
+### 5.14 Saving Your Template
 
 1. Click the **Save** button in the toolbar
 2. The button shows "Saving..." briefly
@@ -537,10 +626,10 @@ The Send page provides a 5-step wizard to guide you through sending emails.
 
 ```mermaid
 flowchart LR
-    S1[1. Select<br/>Template] --> S2[2. Choose<br/>Recipients]
-    S2 --> S3[3. Enter<br/>Subject]
-    S3 --> S4[4. Preview<br/>Email]
-    S4 --> S5[5. Send!]
+    S1["1. Select<br/>Template"] --> S2["2. Choose<br/>Recipients"]
+    S2 --> S3["3. Customize<br/>Variables"]
+    S3 --> S4["4. Preview<br/>Email"]
+    S4 --> S5["5. Send &<br/>Track"]
 
     style S1 fill:#DC2626,color:#fff
     style S2 fill:#16A34A,color:#fff
@@ -552,9 +641,11 @@ flowchart LR
 ### 6.2 Step 1: Select Template
 
 1. Go to **Send** in the sidebar
-2. Browse all available templates (presets + custom)
+2. Choose template source:
+   - **Local Templates** - Presets and your custom templates
+   - **Resend Templates** - Templates from your Resend account
 3. Click on the template you want to use
-4. The selected template shows a green highlight
+4. The selected template shows a highlight
 5. Click **Next**
 
 ### 6.3 Step 2: Choose Recipients
@@ -568,13 +659,14 @@ flowchart LR
 
 > **Tip**: If no contacts appear, go to the Contacts page first and add some!
 
-### 6.4 Step 3: Enter Subject
+### 6.4 Step 3: Customize Variables
 
-1. The subject is pre-filled from the template's default
-2. Modify the subject as needed
-3. You can use variables like `{{recipientName}}`
-4. Example: "Happy Holidays, {{recipientName}}!"
-5. Click **Next**
+1. Enter the email subject line
+2. The subject is pre-filled from the template's default
+3. Modify the subject as needed
+4. You can use variables like `{{recipientName}}`
+5. Example: "Happy Holidays, {{recipientName}}!"
+6. Click **Next**
 
 ### 6.5 Step 4: Preview Email
 
@@ -595,7 +687,7 @@ flowchart LR
 1. Click the **Send X Emails** button
 2. A progress bar shows sending status
 3. Each email is sent individually with personalization
-4. A 300ms delay between emails prevents rate limiting
+4. A delay between emails prevents rate limiting
 
 ```mermaid
 sequenceDiagram
@@ -740,7 +832,7 @@ Each recipient shows:
 
 **Q: Is this platform free to use?**
 
-A: Yes, the platform is completely free. However, you need a Resend account for sending emails. Resend offers a free tier with 3,000 emails/month.
+A: Yes, SendJoy is completely free. However, you need a Resend account for sending emails. Resend offers a free tier with 3,000 emails/month.
 
 **Q: Do I need to install anything?**
 
@@ -768,6 +860,10 @@ A: Yes! Click "Create Template" on the Templates page to start with a basic temp
 
 A: Currently, the platform uses a block-based system. Direct HTML import is not supported, but you can recreate templates using blocks.
 
+**Q: Can I use Resend cloud templates?**
+
+A: Yes! SendJoy integrates with Resend's template system. Access them from the "Resend Templates" tab in the Templates page or during the Send wizard.
+
 **Q: Why do my images not show?**
 
 A: Images must be hosted on a public HTTPS URL. Use services like:
@@ -780,6 +876,10 @@ A: Images must be hosted on a public HTTPS URL. Use services like:
 
 A: In the editor, click anywhere outside the blocks to deselect them. The Properties Panel will show theme settings including color pickers.
 
+**Q: How do I reorder blocks?**
+
+A: Use drag-and-drop! Click and hold the drag handle (grip icon) next to any block in the left panel, then drag it to the new position.
+
 ### Contacts
 
 **Q: What CSV format is supported?**
@@ -788,7 +888,7 @@ A: The CSV must have a header row with an "email" column. Columns for "firstName
 
 **Q: Can I export my contacts?**
 
-A: Currently, contacts are stored in browser localStorage. You can sync with Resend Segments to back them up in your Resend account.
+A: Currently, contacts are stored in browser localStorage. You can sync with Resend Audiences to back them up in your Resend account.
 
 **Q: How do I delete all contacts?**
 
@@ -815,6 +915,10 @@ A: Tracking is available through your Resend Dashboard at [resend.com/emails](ht
 
 A: The wizard shows which emails succeeded and failed. Failed emails show the error reason. You can try sending again.
 
+**Q: What variable syntax should I use?**
+
+A: For local templates, use `{{variableName}}` (camelCase). For Resend cloud templates, use `{{{VARIABLE_NAME}}}` (UPPER_SNAKE_CASE).
+
 ### Technical
 
 **Q: What browsers are supported?**
@@ -837,6 +941,7 @@ A: Yes! Clone the GitHub repository and deploy to Vercel or any Node.js hosting 
 
 ## Need More Help?
 
+- **Help Button**: Click the "?" button in the app for context-aware help
 - **GitHub Issues**: [Report bugs or request features](https://github.com/ChanMeng666/christmas-greeting-email/issues)
 - **Resend Documentation**: [resend.com/docs](https://resend.com/docs)
 - **Author**: [Chan Meng](https://github.com/ChanMeng666)
