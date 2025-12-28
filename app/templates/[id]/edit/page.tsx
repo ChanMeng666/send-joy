@@ -4,6 +4,23 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import {
   ArrowLeft,
   Save,
   Eye,
@@ -229,6 +246,66 @@ const defaultTheme: Theme = {
   shadowOffset: 8,
 }
 
+// Sortable Block Item Component
+function SortableBlockItem({
+  block,
+  isSelected,
+  onSelect,
+  onDelete,
+}: {
+  block: Block
+  isSelected: boolean
+  onSelect: () => void
+  onDelete: () => void
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: block.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : 1,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      onClick={onSelect}
+      className={`flex items-center gap-2 p-2 cursor-pointer transition-colors ${
+        isSelected
+          ? 'bg-neo-cream neo-border'
+          : 'hover:bg-gray-100 border-2 border-transparent'
+      } ${isDragging ? 'shadow-lg' : ''}`}
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="touch-none cursor-grab active:cursor-grabbing"
+      >
+        <GripVertical className="w-4 h-4 text-gray-400" />
+      </div>
+      <span className="text-sm flex-1 capitalize">{block.type}</span>
+      <button
+        onClick={(e) => {
+          e.stopPropagation()
+          onDelete()
+        }}
+        className="text-gray-400 hover:text-red-500"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
+    </div>
+  )
+}
+
 export default function TemplateEditorPage() {
   const params = useParams()
   const router = useRouter()
@@ -256,6 +333,18 @@ export default function TemplateEditorPage() {
   const [historyIndex, setHistoryIndex] = useState(-1)
 
   const selectedBlock = blocks.find(b => b.id === selectedBlockId)
+
+  // Drag and drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
 
   // Load template data
   useEffect(() => {
@@ -305,6 +394,20 @@ export default function TemplateEditorPage() {
     })
     setHistoryIndex(prev => Math.min(prev + 1, 49))
   }, [historyIndex])
+
+  // Handle drag end to reorder blocks
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (over && active.id !== over.id) {
+      const oldIndex = blocks.findIndex((block) => block.id === active.id)
+      const newIndex = blocks.findIndex((block) => block.id === over.id)
+
+      const newBlocks = arrayMove(blocks, oldIndex, newIndex)
+      setBlocks(newBlocks)
+      addToHistory(newBlocks)
+    }
+  }, [blocks, addToHistory])
 
   const handleUndo = () => {
     if (historyIndex > 0) {
@@ -679,36 +782,33 @@ export default function TemplateEditorPage() {
             <h3 className="font-bold text-sm uppercase tracking-wide mb-4">
               Blocks in Template
             </h3>
-            <div className="space-y-2">
-              {blocks.map((block) => (
-                <div
-                  key={block.id}
-                  onClick={() => setSelectedBlockId(block.id)}
-                  className={`flex items-center gap-2 p-2 cursor-pointer transition-colors ${
-                    selectedBlockId === block.id
-                      ? 'bg-neo-cream neo-border'
-                      : 'hover:bg-gray-100 border-2 border-transparent'
-                  }`}
-                >
-                  <GripVertical className="w-4 h-4 text-gray-400 cursor-move" />
-                  <span className="text-sm flex-1 capitalize">{block.type}</span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleDeleteBlock(block.id)
-                    }}
-                    className="text-gray-400 hover:text-red-500"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={blocks.map((b) => b.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="space-y-2">
+                  {blocks.map((block) => (
+                    <SortableBlockItem
+                      key={block.id}
+                      block={block}
+                      isSelected={selectedBlockId === block.id}
+                      onSelect={() => setSelectedBlockId(block.id)}
+                      onDelete={() => handleDeleteBlock(block.id)}
+                    />
+                  ))}
+                  {blocks.length === 0 && (
+                    <p className="text-sm text-gray-400 text-center py-4">
+                      No blocks yet. Add some!
+                    </p>
+                  )}
                 </div>
-              ))}
-              {blocks.length === 0 && (
-                <p className="text-sm text-gray-400 text-center py-4">
-                  No blocks yet. Add some!
-                </p>
-              )}
-            </div>
+              </SortableContext>
+            </DndContext>
           </div>
         </div>
 
