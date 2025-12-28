@@ -9,6 +9,16 @@ import { Card } from '@/components/ui/card'
 
 const TEMPLATES_STORAGE_KEY = 'email-platform-templates'
 
+// Preset template IDs for reference
+const PRESET_TEMPLATE_IDS = [
+  'christmas-classic',
+  'new-year-2025',
+  'chinese-new-year',
+  'birthday',
+  'product-launch',
+  'newsletter',
+]
+
 // Preset templates data
 const presetTemplates = [
   {
@@ -101,36 +111,39 @@ export default function TemplatesPage() {
   const [copyMessage, setCopyMessage] = useState<string | null>(null)
 
   // Load custom templates from localStorage
+  // Only load templates that are NOT preset templates (truly custom ones)
   useEffect(() => {
     const saved = localStorage.getItem(TEMPLATES_STORAGE_KEY)
     if (saved) {
       try {
         const parsed = JSON.parse(saved)
-        // Extract just the metadata for display
-        const templates = Object.entries(parsed).map(([id, data]: [string, unknown]) => {
-          const templateData = data as {
-            name?: string
-            type?: string
-            createdAt?: string
-            resendTemplateId?: string
-            syncedAt?: string
-            isPublished?: boolean
-          }
-          return {
-            id,
-            name: templateData.name || 'Untitled Template',
-            type: (templateData.type as 'holiday' | 'marketing' | 'newsletter') || 'holiday',
-            description: 'Custom template',
-            thumbnail: '✨',
-            color: 'bg-gray-500',
-            isPreset: false as const,
-            createdAt: templateData.createdAt || new Date().toISOString(),
-            // Include sync fields
-            resendTemplateId: templateData.resendTemplateId,
-            syncedAt: templateData.syncedAt,
-            isPublished: templateData.isPublished,
-          }
-        })
+        // Extract just the metadata for display, excluding preset template IDs
+        const templates = Object.entries(parsed)
+          .filter(([id]) => !PRESET_TEMPLATE_IDS.includes(id))
+          .map(([id, data]: [string, unknown]) => {
+            const templateData = data as {
+              name?: string
+              type?: string
+              createdAt?: string
+              resendTemplateId?: string
+              syncedAt?: string
+              isPublished?: boolean
+            }
+            return {
+              id,
+              name: templateData.name || 'Untitled Template',
+              type: (templateData.type as 'holiday' | 'marketing' | 'newsletter') || 'holiday',
+              description: 'Custom template',
+              thumbnail: '✨',
+              color: 'bg-gray-500',
+              isPreset: false as const,
+              createdAt: templateData.createdAt || new Date().toISOString(),
+              // Include sync fields
+              resendTemplateId: templateData.resendTemplateId,
+              syncedAt: templateData.syncedAt,
+              isPublished: templateData.isPublished,
+            }
+          })
         setCustomTemplates(templates)
       } catch (e) {
         console.error('Failed to load custom templates:', e)

@@ -29,6 +29,16 @@ const TEMPLATES_STORAGE_KEY = 'email-platform-templates'
 const CONTACTS_STORAGE_KEY = 'email-platform-contacts'
 const SETTINGS_STORAGE_KEY = 'email-platform-settings'
 
+// Preset template IDs for reference
+const PRESET_TEMPLATE_IDS = [
+  'christmas-classic',
+  'new-year-2025',
+  'chinese-new-year',
+  'birthday',
+  'product-launch',
+  'newsletter',
+]
+
 interface Contact {
   id: string
   email: string
@@ -226,7 +236,7 @@ export default function SendPage() {
   const [selectedContacts, setSelectedContacts] = useState<string[]>([])
   const [subject, setSubject] = useState('')
   const [contacts, setContacts] = useState<Contact[]>([])
-  const [templates, setTemplates] = useState<{ id: string; name: string; emoji: string; resendTemplateId?: string; syncedAt?: string }[]>([])
+  const [templates, setTemplates] = useState<{ id: string; name: string; emoji: string; isCustom?: boolean; resendTemplateId?: string; syncedAt?: string }[]>([])
 
   // Load contacts and templates from localStorage
   useEffect(() => {
@@ -241,7 +251,7 @@ export default function SendPage() {
     }
 
     // Load custom templates and combine with presets
-    const templateList: { id: string; name: string; emoji: string; resendTemplateId?: string; syncedAt?: string }[] = [
+    const templateList: { id: string; name: string; emoji: string; isCustom?: boolean; resendTemplateId?: string; syncedAt?: string }[] = [
       { id: 'christmas-classic', name: 'Classic Christmas', emoji: '🎄' },
       { id: 'new-year-2025', name: 'New Year 2025', emoji: '🎆' },
       { id: 'chinese-new-year', name: 'Chinese New Year', emoji: '🧧' },
@@ -256,11 +266,13 @@ export default function SendPage() {
         const customTemplates = JSON.parse(savedTemplates)
         Object.entries(customTemplates).forEach(([id, data]) => {
           const template = data as { name?: string; resendTemplateId?: string; syncedAt?: string }
-          if (!templateList.find(t => t.id === id)) {
+          // Only add truly custom templates (not preset templates that were modified)
+          if (!PRESET_TEMPLATE_IDS.includes(id)) {
             templateList.push({
               id,
               name: template.name || 'Custom Template',
               emoji: '✨',
+              isCustom: true,
               resendTemplateId: template.resendTemplateId,
               syncedAt: template.syncedAt,
             })
@@ -415,7 +427,7 @@ function StepTemplate({
 }: {
   selected: string | null
   onSelect: (id: string) => void
-  templates: { id: string; name: string; emoji: string; resendTemplateId?: string; syncedAt?: string }[]
+  templates: { id: string; name: string; emoji: string; isCustom?: boolean; resendTemplateId?: string; syncedAt?: string }[]
 }) {
   return (
     <div>
@@ -431,6 +443,15 @@ function StepTemplate({
                 : 'bg-white hover:bg-gray-50'
             }`}
           >
+            {/* Badges */}
+            <div className="absolute top-2 left-2 flex gap-1">
+              {/* Custom badge */}
+              {template.isCustom && (
+                <div className="bg-black text-white text-xs px-1.5 py-0.5 font-bold uppercase">
+                  Custom
+                </div>
+              )}
+            </div>
             {/* Sync badge */}
             {template.resendTemplateId && (
               <div
