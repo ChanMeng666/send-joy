@@ -39,9 +39,9 @@ export default function ResendTemplatesPage() {
     if (settings) {
       try {
         const parsed = JSON.parse(settings)
-        if (parsed.apiKey) {
-          setApiKey(parsed.apiKey)
-          fetchTemplates(parsed.apiKey)
+        if (parsed.resendApiKey) {
+          setApiKey(parsed.resendApiKey)
+          fetchTemplates(parsed.resendApiKey)
         } else {
           setError('API key not configured')
           setLoading(false)
