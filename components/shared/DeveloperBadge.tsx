@@ -45,7 +45,7 @@ export function DeveloperBadge() {
               Portfolio
             </a>
             <a
-              href="https://github.com/ChanMeng666/christmas-greeting-email"
+              href="https://github.com/ChanMeng666/send-joy"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-gray-600 hover:text-black transition-colors"

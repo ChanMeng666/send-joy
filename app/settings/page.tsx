@@ -277,7 +277,7 @@ export default function SettingsPage() {
                 <p className="text-sm text-green-700">
                   This project is open source. You can review the code to verify our privacy claims at{' '}
                   <a
-                    href="https://github.com/ChanMeng666/christmas-greeting-email"
+                    href="https://github.com/ChanMeng666/send-joy"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline hover:no-underline font-medium"

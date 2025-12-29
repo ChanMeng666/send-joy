@@ -73,6 +73,6 @@ Created by Chan Meng. MIT License. Open source on GitHub.
 
 ## Links
 
-- Live Demo: https://christmas-greeting-email.vercel.app/
-- GitHub: https://github.com/ChanMeng666/christmas-greeting-email
+- Live Demo: https://send-joy.vercel.app/
+- GitHub: https://github.com/ChanMeng666/send-joy
 - Author: https://chanmeng.live/

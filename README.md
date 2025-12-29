@@ -1,6 +1,6 @@
 <div align="center"><a name="readme-top"></a>
 
-[![SendJoy Logo](./public/christmas-greeting-email-logo.svg)](#)
+[![SendJoy Logo](./public/send-joy-logo.svg)](#)
 
 # SendJoy<br/><h3>Visual Email Template Platform</h3>
 
@@ -110,8 +110,8 @@ Whether you're sending holiday greetings, product announcements, or newsletters,
 <details>
   <summary><kbd>⭐ Star History</kbd></summary>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ChanMeng666%2Fchristmas-greeting-email&theme=dark&type=Date">
-    <img width="100%" src="https://api.star-history.com/svg?repos=ChanMeng666%2Fchristmas-greeting-email&type=Date">
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ChanMeng666%2Fsend-joy&theme=dark&type=Date">
+    <img width="100%" src="https://api.star-history.com/svg?repos=ChanMeng666%2Fsend-joy&type=Date">
   </picture>
 </details>
 
@@ -467,7 +467,7 @@ graph TB
 ### Project Structure
 
 ```
-christmas-greeting-email/
+send-joy/
 ├── app/                              # Next.js App Router
 │   ├── page.tsx                      # Dashboard homepage
 │   ├── layout.tsx                    # Root layout with sidebar
@@ -539,7 +539,7 @@ christmas-greeting-email/
 | [![][demo-shield-badge]][demo-link] | No installation required! Start using SendJoy immediately. |
 | :---------------------------------- | :---------------------------------------------------------- |
 
-1. Visit **[https://christmas-greeting-email.vercel.app/](https://christmas-greeting-email.vercel.app/)**
+1. Visit **[https://send-joy.vercel.app/](https://send-joy.vercel.app/)**
 2. Go to **Settings** and enter your Resend API Key
 3. Add your contacts (manually, CSV, or sync from Resend)
 4. Choose a template and customize it
@@ -556,8 +556,8 @@ christmas-greeting-email/
 **1. Clone Repository**
 
 ```bash
-git clone https://github.com/ChanMeng666/christmas-greeting-email.git
-cd christmas-greeting-email
+git clone https://github.com/ChanMeng666/send-joy.git
+cd send-joy
 ```
 
 **2. Install Dependencies**
@@ -583,7 +583,7 @@ npm run dev
 
 ### Option 3: Deploy Your Own
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ChanMeng666/christmas-greeting-email)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ChanMeng666/send-joy)
 
 <div align="right">
 
@@ -600,7 +600,7 @@ npm run dev
 
 **Vercel (Recommended)**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ChanMeng666/christmas-greeting-email)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ChanMeng666/send-joy)
 
 **Manual Deployment:**
 
@@ -616,7 +616,7 @@ vercel --prod
 
 | Deploy with Netlify | Deploy with Railway |
 | :-----------------: | :-----------------: |
-| [![Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/ChanMeng666/christmas-greeting-email) | [![Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ChanMeng666/christmas-greeting-email) |
+| [![Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/ChanMeng666/send-joy) | [![Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/ChanMeng666/send-joy) |
 
 ### Environment Variables
 
@@ -970,8 +970,8 @@ shadow-neo-gold: 4px 4px 0px #F59E0B
 
 ```bash
 # Clone repository
-git clone https://github.com/ChanMeng666/christmas-greeting-email.git
-cd christmas-greeting-email
+git clone https://github.com/ChanMeng666/send-joy.git
+cd send-joy
 
 # Install dependencies
 npm install
@@ -1016,8 +1016,8 @@ We welcome contributions! Here's how you can help improve SendJoy:
 **1. Fork & Clone:**
 
 ```bash
-git clone https://github.com/ChanMeng666/christmas-greeting-email.git
-cd christmas-greeting-email
+git clone https://github.com/ChanMeng666/send-joy.git
+cd send-joy
 ```
 
 **2. Create Branch:**
@@ -1041,11 +1041,11 @@ git checkout -b feature/your-feature-name
 
 [![][pr-welcome-shield]][pr-welcome-link]
 
-<a href="https://github.com/ChanMeng666/christmas-greeting-email/graphs/contributors" target="_blank">
+<a href="https://github.com/ChanMeng666/send-joy/graphs/contributors" target="_blank">
   <table>
     <tr>
       <th colspan="2">
-        <br><img src="https://contrib.rocks/image?repo=ChanMeng666/christmas-greeting-email"><br><br>
+        <br><img src="https://contrib.rocks/image?repo=ChanMeng666/send-joy"><br><br>
       </th>
     </tr>
   </table>
@@ -1224,12 +1224,12 @@ A: SendJoy is a web application with responsive design. It works well on tablets
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 
 <!-- Project Links -->
-[demo-link]: https://christmas-greeting-email.vercel.app/
-[github-issues-link]: https://github.com/ChanMeng666/christmas-greeting-email/issues
-[github-stars-link]: https://github.com/ChanMeng666/christmas-greeting-email/stargazers
-[github-forks-link]: https://github.com/ChanMeng666/christmas-greeting-email/forks
-[github-license-link]: https://github.com/ChanMeng666/christmas-greeting-email/blob/main/LICENSE
-[pr-welcome-link]: https://github.com/ChanMeng666/christmas-greeting-email/pulls
+[demo-link]: https://send-joy.vercel.app/
+[github-issues-link]: https://github.com/ChanMeng666/send-joy/issues
+[github-stars-link]: https://github.com/ChanMeng666/send-joy/stargazers
+[github-forks-link]: https://github.com/ChanMeng666/send-joy/forks
+[github-license-link]: https://github.com/ChanMeng666/send-joy/blob/main/LICENSE
+[pr-welcome-link]: https://github.com/ChanMeng666/send-joy/pulls
 
 <!-- Tech Links -->
 [nextjs-link]: https://nextjs.org/
@@ -1238,9 +1238,9 @@ A: SendJoy is a web application with responsive design. It works well on tablets
 [tailwind-link]: https://tailwindcss.com/
 
 <!-- Shield Badges -->
-[github-stars-shield]: https://img.shields.io/github/stars/ChanMeng666/christmas-greeting-email?color=ffcb47&labelColor=black&style=flat-square
-[github-forks-shield]: https://img.shields.io/github/forks/ChanMeng666/christmas-greeting-email?color=8ae8ff&labelColor=black&style=flat-square
-[github-issues-shield]: https://img.shields.io/github/issues/ChanMeng666/christmas-greeting-email?color=ff80eb&labelColor=black&style=flat-square
+[github-stars-shield]: https://img.shields.io/github/stars/ChanMeng666/send-joy?color=ffcb47&labelColor=black&style=flat-square
+[github-forks-shield]: https://img.shields.io/github/forks/ChanMeng666/send-joy?color=8ae8ff&labelColor=black&style=flat-square
+[github-issues-shield]: https://img.shields.io/github/issues/ChanMeng666/send-joy?color=ff80eb&labelColor=black&style=flat-square
 [github-license-shield]: https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square
 [vercel-shield]: https://img.shields.io/badge/vercel-deployed-55b467?labelColor=black&logo=vercel&style=flat-square
 [nextjs-shield]: https://img.shields.io/badge/Next.js-15-000000?labelColor=black&logo=next.js&logoColor=white&style=flat-square
@@ -1253,10 +1253,10 @@ A: SendJoy is a web application with responsive design. It works well on tablets
 [demo-shield-badge]: https://img.shields.io/badge/TRY_DEMO-LIVE-55b467?labelColor=black&logo=vercel&style=for-the-badge
 
 <!-- Social Share Links -->
-[share-x-link]: https://x.com/intent/tweet?hashtags=email,marketing,opensource&text=Check%20out%20SendJoy%20-%20A%20beautiful%20email%20template%20platform&url=https%3A%2F%2Fgithub.com%2FChanMeng666%2Fchristmas-greeting-email
-[share-linkedin-link]: https://linkedin.com/sharing/share-offsite/?url=https://github.com/ChanMeng666/christmas-greeting-email
-[share-reddit-link]: https://www.reddit.com/submit?title=SendJoy%20-%20Visual%20Email%20Template%20Platform&url=https%3A%2F%2Fgithub.com%2FChanMeng666%2Fchristmas-greeting-email
-[share-whatsapp-link]: https://api.whatsapp.com/send?text=Check%20out%20SendJoy%20-%20A%20beautiful%20email%20template%20platform%20https%3A%2F%2Fgithub.com%2FChanMeng666%2Fchristmas-greeting-email
+[share-x-link]: https://x.com/intent/tweet?hashtags=email,marketing,opensource&text=Check%20out%20SendJoy%20-%20A%20beautiful%20email%20template%20platform&url=https%3A%2F%2Fgithub.com%2FChanMeng666%2Fsend-joy
+[share-linkedin-link]: https://linkedin.com/sharing/share-offsite/?url=https://github.com/ChanMeng666/send-joy
+[share-reddit-link]: https://www.reddit.com/submit?title=SendJoy%20-%20Visual%20Email%20Template%20Platform&url=https%3A%2F%2Fgithub.com%2FChanMeng666%2Fsend-joy
+[share-whatsapp-link]: https://api.whatsapp.com/send?text=Check%20out%20SendJoy%20-%20A%20beautiful%20email%20template%20platform%20https%3A%2F%2Fgithub.com%2FChanMeng666%2Fsend-joy
 
 [share-x-shield]: https://img.shields.io/badge/-share%20on%20x-black?labelColor=black&logo=x&logoColor=white&style=flat-square
 [share-linkedin-shield]: https://img.shields.io/badge/-share%20on%20linkedin-black?labelColor=black&logo=linkedin&logoColor=white&style=flat-square

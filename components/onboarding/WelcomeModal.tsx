@@ -70,7 +70,7 @@ export function WelcomeModal({ onGetStarted, onSkip }: WelcomeModalProps) {
           {/* Icon */}
           <div className="inline-flex items-center justify-center w-20 h-20 bg-neo-cream neo-border mb-6">
             <Image
-              src="/christmas-greeting-email-logo.svg"
+              src="/send-joy-logo.svg"
               alt="Christmas Greeting Email Logo"
               width={56}
               height={46}

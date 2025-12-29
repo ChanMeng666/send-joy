@@ -27,11 +27,11 @@ export const config = {
   emailSubject: '🎄 Season\'s Greetings from Chan Meng!',
 
   // Personal image URLs
-  personalImageUrl: 'https://lxd4dc8r8oetlgua.public.blob.vercel-storage.com/public/img/christmas-greeting-email/christmas-greeting.png',
+  personalImageUrl: 'https://lxd4dc8r8oetlgua.public.blob.vercel-storage.com/public/img/send-joy/christmas-greeting.png',
 
   // Additional festive image
-  festiveImageUrl: 'https://lxd4dc8r8oetlgua.public.blob.vercel-storage.com/public/img/christmas-greeting-email/christmas-greeting-3.png',
+  festiveImageUrl: 'https://lxd4dc8r8oetlgua.public.blob.vercel-storage.com/public/img/send-joy/christmas-greeting-3.png',
 
   // Sticker image (transparent background)
-  stickerImageUrl: 'https://lxd4dc8r8oetlgua.public.blob.vercel-storage.com/public/img/christmas-greeting-email/christmas-greeting-2.png',
+  stickerImageUrl: 'https://lxd4dc8r8oetlgua.public.blob.vercel-storage.com/public/img/send-joy/christmas-greeting-2.png',
 };

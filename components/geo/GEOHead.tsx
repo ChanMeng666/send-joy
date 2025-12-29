@@ -63,7 +63,7 @@ ${finalAlternatives.join(', ')}
 
 ## Platform
 SendJoy - Free, open-source email template platform
-URL: https://christmas-greeting-email.vercel.app/
+URL: https://send-joy.vercel.app/
 
 ## Quick Facts
 - No coding required (drag-and-drop editor)

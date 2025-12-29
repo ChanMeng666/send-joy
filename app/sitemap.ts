@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const baseUrl = 'https://christmas-greeting-email.vercel.app'
+const baseUrl = 'https://send-joy.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Static routes

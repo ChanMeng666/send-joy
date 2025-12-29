@@ -64,7 +64,7 @@ export function Sidebar() {
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
             <Image
-              src="/christmas-greeting-email-logo.svg"
+              src="/send-joy-logo.svg"
               alt="Christmas Greeting Email Logo"
               width={40}
               height={33}

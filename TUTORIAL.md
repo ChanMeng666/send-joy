@@ -23,7 +23,7 @@ You can access SendJoy in two ways:
 
 **Option A: Use the Live Version (Recommended)**
 
-Simply visit: **[https://christmas-greeting-email.vercel.app/](https://christmas-greeting-email.vercel.app/)**
+Simply visit: **[https://send-joy.vercel.app/](https://send-joy.vercel.app/)**
 
 No installation or download required!
 
@@ -32,8 +32,8 @@ No installation or download required!
 If you prefer to run the platform on your own computer:
 
 ```bash
-git clone https://github.com/ChanMeng666/christmas-greeting-email.git
-cd christmas-greeting-email
+git clone https://github.com/ChanMeng666/send-joy.git
+cd send-joy
 npm install
 npm run dev
 ```
@@ -942,7 +942,7 @@ A: Yes! Clone the GitHub repository and deploy to Vercel or any Node.js hosting 
 ## Need More Help?
 
 - **Help Button**: Click the "?" button in the app for context-aware help
-- **GitHub Issues**: [Report bugs or request features](https://github.com/ChanMeng666/christmas-greeting-email/issues)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/ChanMeng666/send-joy/issues)
 - **Resend Documentation**: [resend.com/docs](https://resend.com/docs)
 - **Author**: [Chan Meng](https://github.com/ChanMeng666)
 

@@ -14,7 +14,7 @@ import {
 
 const inter = Inter({ subsets: ['latin'] })
 
-const baseUrl = 'https://christmas-greeting-email.vercel.app'
+const baseUrl = 'https://send-joy.vercel.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -59,8 +59,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/christmas-greeting-email-logo.svg',
-    apple: '/christmas-greeting-email-logo.svg',
+    icon: '/send-joy-logo.svg',
+    apple: '/send-joy-logo.svg',
   },
   openGraph: {
     type: 'website',
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
       'Create beautiful email templates with drag-and-drop. Free, open-source, no coding required.',
     images: [
       {
-        url: `${baseUrl}/christmas-greeting-email-logo.svg`,
+        url: `${baseUrl}/send-joy-logo.svg`,
         width: 512,
         height: 512,
         alt: 'SendJoy Logo',
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SendJoy - Visual Email Template Platform',
     description: 'Create beautiful email templates with drag-and-drop. Free, open-source.',
-    images: [`${baseUrl}/christmas-greeting-email-logo.svg`],
+    images: [`${baseUrl}/send-joy-logo.svg`],
     creator: '@ChanMeng666',
   },
   alternates: {

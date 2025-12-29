@@ -1,4 +1,4 @@
-const baseUrl = 'https://christmas-greeting-email.vercel.app'
+const baseUrl = 'https://send-joy.vercel.app'
 
 /**
  * Organization schema for SendJoy brand identity
@@ -10,7 +10,7 @@ export function getOrganizationSchema() {
     name: 'SendJoy',
     alternateName: 'Christmas Greeting Email Platform',
     url: baseUrl,
-    logo: `${baseUrl}/christmas-greeting-email-logo.svg`,
+    logo: `${baseUrl}/send-joy-logo.svg`,
     description:
       'Free visual email template platform for creating holiday greetings, marketing emails, and newsletters',
     founder: {
@@ -22,7 +22,7 @@ export function getOrganizationSchema() {
         'https://www.linkedin.com/in/chanmeng666/',
       ],
     },
-    sameAs: ['https://github.com/ChanMeng666/christmas-greeting-email'],
+    sameAs: ['https://github.com/ChanMeng666/send-joy'],
   }
 }
 
@@ -44,7 +44,7 @@ export function getWebApplicationSchema() {
     browserRequirements: 'Requires JavaScript. Best on Chrome, Firefox, Safari, Edge.',
     softwareVersion: '2.0.0',
     releaseNotes: 'Next.js 15 with React 19, enhanced visual editor, Resend cloud sync',
-    screenshot: `${baseUrl}/christmas-greeting-email-logo.svg`,
+    screenshot: `${baseUrl}/send-joy-logo.svg`,
     featureList: [
       '6 preset email templates (Holiday, Marketing, Newsletter)',
       '7 block types for visual editing',

@@ -1,5 +1,5 @@
 # SendJoy - Visual Email Template Platform
-# https://christmas-greeting-email.vercel.app/
+# https://send-joy.vercel.app/
 
 # Allow all search engine crawlers
 User-agent: *
@@ -37,7 +37,7 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemap location
-Sitemap: https://christmas-greeting-email.vercel.app/sitemap.xml
+Sitemap: https://send-joy.vercel.app/sitemap.xml
 
 # LLMs.txt for AI assistants
-# See: https://christmas-greeting-email.vercel.app/llms.txt
+# See: https://send-joy.vercel.app/llms.txt
