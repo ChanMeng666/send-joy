@@ -3,11 +3,14 @@
   "version": "2.0.0",
   "description": "Visual email template platform for creating holiday greetings, marketing emails, and newsletters",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "legacy:preview": "tsx src/preview.ts",
     "legacy:send": "tsx src/index.ts",
     "legacy:send:test": "tsx src/index.ts --test",
@@ -25,6 +28,7 @@
   "author": "Chan Meng",
   "license": "MIT",
   "dependencies": {
+    "@opennextjs/cloudflare": "latest",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
@@ -54,6 +58,7 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "wrangler": "latest",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",

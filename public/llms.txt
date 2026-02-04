@@ -73,6 +73,6 @@ Created by Chan Meng. MIT License. Open source on GitHub.
 
 ## Links
 
-- Live Demo: https://send-joy.vercel.app/
+- Live Demo: https://sendjoy.chanmeng-dev.workers.dev/
 - GitHub: https://github.com/ChanMeng666/send-joy
 - Author: https://chanmeng.live/

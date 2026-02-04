@@ -539,7 +539,7 @@ send-joy/
 | [![][demo-shield-badge]][demo-link] | No installation required! Start using SendJoy immediately. |
 | :---------------------------------- | :---------------------------------------------------------- |
 
-1. Visit **[https://send-joy.vercel.app/](https://send-joy.vercel.app/)**
+1. Visit **[https://sendjoy.chanmeng-dev.workers.dev/](https://sendjoy.chanmeng-dev.workers.dev/)**
 2. Go to **Settings** and enter your Resend API Key
 3. Add your contacts (manually, CSV, or sync from Resend)
 4. Choose a template and customize it
@@ -1224,7 +1224,7 @@ A: SendJoy is a web application with responsive design. It works well on tablets
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 
 <!-- Project Links -->
-[demo-link]: https://send-joy.vercel.app/
+[demo-link]: https://sendjoy.chanmeng-dev.workers.dev/
 [github-issues-link]: https://github.com/ChanMeng666/send-joy/issues
 [github-stars-link]: https://github.com/ChanMeng666/send-joy/stargazers
 [github-forks-link]: https://github.com/ChanMeng666/send-joy/forks

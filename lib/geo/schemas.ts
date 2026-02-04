@@ -1,4 +1,4 @@
-const baseUrl = 'https://send-joy.vercel.app'
+const baseUrl = 'https://sendjoy.chanmeng-dev.workers.dev'
 
 /**
  * Organization schema for SendJoy brand identity

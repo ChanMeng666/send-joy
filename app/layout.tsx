@@ -14,7 +14,7 @@ import {
 
 const inter = Inter({ subsets: ['latin'] })
 
-const baseUrl = 'https://send-joy.vercel.app'
+const baseUrl = 'https://sendjoy.chanmeng-dev.workers.dev'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

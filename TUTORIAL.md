@@ -23,7 +23,7 @@ You can access SendJoy in two ways:
 
 **Option A: Use the Live Version (Recommended)**
 
-Simply visit: **[https://send-joy.vercel.app/](https://send-joy.vercel.app/)**
+Simply visit: **[https://sendjoy.chanmeng-dev.workers.dev/](https://sendjoy.chanmeng-dev.workers.dev/)**
 
 No installation or download required!
 

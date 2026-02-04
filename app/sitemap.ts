@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const baseUrl = 'https://send-joy.vercel.app'
+const baseUrl = 'https://sendjoy.chanmeng-dev.workers.dev'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Static routes

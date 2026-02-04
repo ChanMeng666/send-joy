@@ -63,7 +63,7 @@ ${finalAlternatives.join(', ')}
 
 ## Platform
 SendJoy - Free, open-source email template platform
-URL: https://send-joy.vercel.app/
+URL: https://sendjoy.chanmeng-dev.workers.dev/
 
 ## Quick Facts
 - No coding required (drag-and-drop editor)

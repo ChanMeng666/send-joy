@@ -1,5 +1,5 @@
 # SendJoy - Visual Email Template Platform
-# https://send-joy.vercel.app/
+# https://sendjoy.chanmeng-dev.workers.dev/
 
 # Allow all search engine crawlers
 User-agent: *
@@ -37,7 +37,7 @@ User-agent: cohere-ai
 Allow: /
 
 # Sitemap location
-Sitemap: https://send-joy.vercel.app/sitemap.xml
+Sitemap: https://sendjoy.chanmeng-dev.workers.dev/sitemap.xml
 
 # LLMs.txt for AI assistants
-# See: https://send-joy.vercel.app/llms.txt
+# See: https://sendjoy.chanmeng-dev.workers.dev/llms.txt

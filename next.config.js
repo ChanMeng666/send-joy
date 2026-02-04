@@ -1,20 +1,24 @@
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+initOpenNextCloudflareForDev();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 启用实验性功能以支持 React 19
+  output: 'standalone',
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',
     },
   },
-  // 允许外部图片域名
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'lxd4dc8r8oetlgua.public.blob.vercel-storage.com',
+        hostname: '**',
       },
     ],
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
